@@ -6,7 +6,7 @@ router = APIRouter()
 
 
 @router.get("/recipes/{recipe_id}")
-async def get_single_recipe(recipe_id: int):
+async def get_single_recipe(recipe_id: int):  
     try:
         response = get(
             f"https://api.spoonacular.com/recipes/{recipe_id}/information",
