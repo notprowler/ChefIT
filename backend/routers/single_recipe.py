@@ -6,13 +6,30 @@ router = APIRouter()
 
 
 @router.get("/recipes/{recipe_id}")
-async def get_single_recipe(recipe_id: int):
+async def get_single_recipe(recipe_id: int):  
     try:
         response = get(
             f"https://api.spoonacular.com/recipes/{recipe_id}/information",
             params={
                 "apiKey": getenv("SPOONACULAR_API_KEY"),
                 "includeNutrition": False,
+            },
+        )
+        return response.json()
+
+    except RequestException as e:
+        raise HTTPException(
+            status_code=500, detail=f"Error calling Spoonacular API: {str(e)}")
+
+
+@router.get("/recipes")
+async def get_random_recipes():
+    try:
+        response = get(
+            "https://api.spoonacular.com/recipes/random",
+            params={
+                "apiKey": getenv("SPOONACULAR_API_KEY"),
+                "number": 20,
             },
         )
         return response.json()
