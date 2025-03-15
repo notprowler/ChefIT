@@ -16,3 +16,35 @@ pip install -r requirements.txt
 python3 -m fastapi dev main.py
 Open http://127.0.0.1:8000
 ```
+
+## How to deploy
+
+### Prerequisites
+
+- Python 3.12
+- Docker
+- Google Cloud Run CLI
+
+Build the docker image
+
+```bash
+docker buildx build --platform linux/amd64 -t gcr.io/chefit-453802/chefit:<version> --load .
+```
+
+Push the docker image to GCR
+
+```bash
+docker push gcr.io/chefit-453802/chefit:<version>
+```
+
+Deploy docker image to google cloud run
+
+```bash
+gcloud run deploy chefit-service \
+  --image gcr.io/chefit-453802/chefit:<version> \
+  --platform managed \
+  --region us-east4 \
+  --allow-unauthenticated \
+  --set-env-vars SPOONACULAR_API_KEY=your_api_key_here \
+  --max-instances=1
+```
