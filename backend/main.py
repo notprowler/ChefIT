@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import recipes
 from dotenv import load_dotenv
-import os
 
 load_dotenv(dotenv_path="../.env")
 
@@ -11,13 +10,15 @@ app = FastAPI(
     title="ChefIT API", description="API for ChefIT application", version="1.0.0"
 )
 
-# Add CORS middleware
+# Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Your frontend origin
+    allow_origins=[
+        "*",
+    ],
     allow_credentials=True,
-    allow_methods=["*"],  # Allow all methods
-    allow_headers=["*"],  # Allow all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 

@@ -1,0 +1,57 @@
+# Dependencies
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+pnpm-debug.log
+.pnpm-store/
+
+# Environment and config
+.env
+.env.*
+!.env.example
+.npmrc
+.yarnrc
+.pnpmrc
+
+# Cache and logs
+.cache
+.npm
+.eslintcache
+.stylelintcache
+.turbo
+.vite
+
+# Testing
+coverage
+.nyc_output
+test-results
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Misc
+.git
+.github
+.husky
+.storybook
+storybook-static
+*.md
+LICENSE
+.gitignore
+docker-compose*
+Dockerfile*
+!Dockerfile.frontend
+
+# Temporary files
+*.log
+*.tmp
+*~

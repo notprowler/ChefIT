@@ -19,7 +19,9 @@ function RecipesPage() {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await fetch('http://localhost:8000/recipes');
+        const response = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/recipes`
+        );
         const data = await response.json();
         setRecipes(data.recipes);
       } catch (error) {
