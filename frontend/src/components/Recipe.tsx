@@ -1,6 +1,5 @@
 import { FaUtensils } from "react-icons/fa";
 import { IoTime } from "react-icons/io5";
-import { Button } from "./ui/button";
 
 interface RecipeProps {
   recipe: {
@@ -49,14 +48,14 @@ function Recipe({ recipe }: RecipeProps) {
             <div className="flex flex-row gap-2">
               <p>
                 {recipe.vegan ? (
-                  <p className="border rounded-lg px-2">Vegan</p>
+                  <span className="border rounded-lg px-2">Vegan</span>
                 ) : (
                   ""
                 )}
               </p>
               <p>
                 {recipe.vegetarian ? (
-                  <p className="border rounded-lg px-2">Vegetarian</p>
+                  <span className="border rounded-lg px-2">Vegetarian</span>
                 ) : (
                   ""
                 )}
@@ -65,7 +64,9 @@ function Recipe({ recipe }: RecipeProps) {
           </div>
         </div>
         <div>
-          <Button className="bg-orange-400 w-full">View Recipe</Button>
+          <button className="px-4 py-2 bg-orange-400 rounded-lg w-full">
+            View Recipe
+          </button>
         </div>
       </div>
     </div>
