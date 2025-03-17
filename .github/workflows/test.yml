@@ -21,17 +21,19 @@ jobs:
         with:
           node-version: "20" # Use your project's Node.js version
 
-      # Step 3: Install dependencies for frontend
-      - name: Install frontend dependencies
+      # Step 3: Clean install dependencies
+      - name: Clean install dependencies
         run: |
           cd frontend
+          rm -rf node_modules package-lock.json
           npm install
+          npm install @rollup/rollup-linux-x64-gnu  # Add this explicitly
 
       # Step 4: Run Vitest tests for frontend
       - name: Run Vitest tests
         run: |
           cd frontend
-          npm run test
+          npm run test -- --run  # Add --run flag to run tests once
 
   # Backend tests with pytest (FastAPI)
   test-backend:
