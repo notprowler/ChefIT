@@ -7,10 +7,13 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
+  timeout: 30000,
   use: {
     baseURL: 'http://localhost:5173',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
+    actionTimeout: 15000,
+    navigationTimeout: 15000,
   },
   projects: [
     {
@@ -24,5 +27,6 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',
     stderr: 'pipe',
+    timeout: 60000,
   },
 });

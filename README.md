@@ -18,6 +18,59 @@ python3 -m fastapi dev main.py
 Open http://127.0.0.1:8000
 ```
 
+## Running Tests
+
+### Backend Tests
+
+To run the backend tests:
+
+```bash
+cd backend
+python -m pytest
+```
+
+### Frontend Tests
+
+#### Unit Tests
+
+To run the frontend unit tests with Jest:
+
+```bash
+cd frontend
+npm test
+```
+
+To run the tests in watch mode:
+
+```bash
+cd frontend
+npm run test:watch
+```
+
+#### End-to-End Tests
+
+To run the frontend end-to-end tests with Playwright:
+
+```bash
+cd frontend
+npm run test:e2e
+```
+
+### Continuous Integration
+
+This project uses GitHub Actions for continuous integration. The workflow automatically runs:
+
+1. Frontend unit tests with Jest
+2. Frontend end-to-end tests with Playwright
+3. Backend tests with pytest
+
+The workflow is triggered on:
+
+- Push to main/master branches
+- Pull requests to main/master branches
+
+You can view the workflow configuration in `.github/workflows/test.yml`.
+
 ## How to deploy
 
 ### Prerequisites
