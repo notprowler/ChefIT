@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
 import { Menu } from "lucide-react";
 import { useState } from "react";
 import { PiChefHatBold } from "react-icons/pi";
@@ -19,9 +20,14 @@ const Navbar = () => {
 
           {/* Mobile menu button */}
           <div className="md:hidden">
-            <button onClick={() => setIsOpen(!isOpen)} aria-label="Toggle menu">
-              <Menu className="h-6 w-6 cursor-pointer" />
-            </button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label="Toggle menu"
+            >
+              <Menu className="h-6 w-6" />
+            </Button>
           </div>
 
           <div className="hidden md:flex items-center space-x-8">
@@ -37,9 +43,7 @@ const Navbar = () => {
             >
               Recipes
             </Link>
-            <button className="w-24 px-4 py-2 bg-black text-white rounded-lg cursor-pointer">
-              Log In
-            </button>
+            <Button className="w-24">Log In</Button>
           </div>
         </div>
 
@@ -62,9 +66,7 @@ const Navbar = () => {
                 Recipes
               </Link>
               <div className="px-3 py-2">
-                <button className="px-4 py-2 bg-black text-white rounded-lg cursor-pointer">
-                  Log In
-                </button>
+                <Button>Log In</Button>
               </div>
             </div>
           </div>
