@@ -1,0 +1,65 @@
+name: Run Jest and Pytest Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # Frontend tests with Jest
+  test-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20" # Use your project's Node.js version
+
+      # Step 3: Install dependencies for frontend
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install
+
+      # Step 4: Run Jest tests for frontend
+      - name: Run Jest tests
+        run: |
+          cd frontend
+          npm test
+
+  # Backend tests with pytest (FastAPI)
+  test-backend:
+    runs-on: ubuntu-latest
+    needs: test-frontend # This ensures frontend tests complete before backend tests run
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9" # Use your backend Python version
+
+      # Step 3: Install backend dependencies
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      # Step 4: Run pytest for backend
+      - name: Run pytest tests
+        run: |
+          cd backend
+          source venv/bin/activate
+          pytest
