@@ -22,5 +22,8 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/setupTests.ts'],
+    alias: {
+      '@': path.resolve(__dirname, './src')
+    }
   },
 } as VitestConfigExport);
