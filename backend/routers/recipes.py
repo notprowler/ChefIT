@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from requests import RequestException, get
 from os import getenv
 
@@ -6,7 +7,7 @@ router = APIRouter()
 
 
 @router.get("/recipes/{recipe_id}")
-async def get_single_recipe(recipe_id: int):  
+async def get_single_recipe(recipe_id: int):
     try:
         response = get(
             f"https://api.spoonacular.com/recipes/{recipe_id}/information",

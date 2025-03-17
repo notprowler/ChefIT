@@ -1,6 +1,11 @@
 # Use an official Python image
 FROM python:3.12.4
 
+# Accept build argument for version
+ARG VERSION=latest
+# Set version as a label
+LABEL version=$VERSION
+
 # Set environment variable in "KEY=VALUE" format
 ENV PYTHONUNBUFFERED=True
 
@@ -11,7 +16,7 @@ WORKDIR /app
 RUN pip install --upgrade pip
 
 # Copy only the requirements file first (for faster caching of pip installs)
-COPY backend/requirements.txt /app/requirements.txt
+COPY ./requirements.txt /app/requirements.txt
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r /app/requirements.txt
@@ -25,4 +30,4 @@ EXPOSE 8080
 
 # Run the FastAPI app with uvicorn
 # If "main.py" is inside "backend/" and defines `app = FastAPI()`, use "backend.main:app"
-CMD ["uvicorn", "main:app", "--app-dir", "backend", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]

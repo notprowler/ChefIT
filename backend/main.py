@@ -1,13 +1,24 @@
 from fastapi import FastAPI
-from routers import single_recipe
+from fastapi.middleware.cors import CORSMiddleware
+from routers import recipes
 from dotenv import load_dotenv
-import os
 
 load_dotenv(dotenv_path="../.env")
 
 # Initialize FastAPI app
 app = FastAPI(
     title="ChefIT API", description="API for ChefIT application", version="1.0.0"
+)
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "*",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
@@ -22,4 +33,8 @@ async def health_check():
 
 
 # Get Single Recipe
-app.include_router(single_recipe.router)
+app.include_router(recipes.router)
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
