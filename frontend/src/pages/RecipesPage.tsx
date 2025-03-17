@@ -39,6 +39,7 @@ function RecipesPage() {
   return (
     <div className="pt-16">
       <Navbar />
+      <h1 className="flex justify-center text-xl pt-6">View Random Recipes</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 p-12">
         {recipes.map((recipe) => (
           <Recipe key={recipe.id} recipe={recipe} />

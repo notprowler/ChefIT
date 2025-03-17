@@ -1,4 +1,4 @@
-name: Run Jest and Pytest Tests
+name: Run Vitest and Pytest Tests
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  # Frontend tests with Jest
+  # Frontend tests with Vitest
   test-frontend:
     runs-on: ubuntu-latest
 
@@ -27,11 +27,11 @@ jobs:
           cd frontend
           npm install
 
-      # Step 4: Run Jest tests for frontend
-      - name: Run Jest tests
+      # Step 4: Run Vitest tests for frontend
+      - name: Run Vitest tests
         run: |
           cd frontend
-          npm test
+          npm run test
 
   # Backend tests with pytest (FastAPI)
   test-backend:
