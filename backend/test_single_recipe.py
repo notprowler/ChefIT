@@ -1,5 +1,5 @@
 from fastapi.testclient import TestClient
-from routers.recipes import get_single_recipe, get_random_recipes
+from backend.routers.recipes import get_single_recipe, get_random_recipes
 from main import app
 
 client = TestClient(app)
