@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from routers import recipes
 from dotenv import load_dotenv
 
-load_dotenv(dotenv_path="../.env")
+load_dotenv(dotenv_path=".env")
 
 # Initialize FastAPI app
 app = FastAPI(
