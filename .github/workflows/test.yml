@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20" # Use your project's Node.js version
+          node-version: "20" # Use project's Node.js version
 
       # Step 3: Clean install dependencies
       - name: Clean install dependencies
@@ -61,10 +61,11 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install -r requirements.txt
+          pip install pytest  # Add this line explicitly
 
       # Step 4: Run pytest for backend
       - name: Run pytest tests
         run: |
           cd backend
           source venv/bin/activate
-          pytest
+          python -m pytest  # Changed to use python -m pytest
