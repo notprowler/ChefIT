@@ -1,6 +1,9 @@
 name: Run Vitest and Pytest Tests
 
 on:
+  push:
+    branches:
+      - "*" # This will trigger on any branch push
   pull_request:
     branches:
       - main
@@ -63,9 +66,20 @@ jobs:
           pip install -r requirements.txt
           pip install pytest  # Add this line explicitly
 
-      # Step 4: Run pytest for backend
+      # Step 4: Debug Environment
+      - name: Debug Environment
+        run: |
+          cd backend
+          source venv/bin/activate
+          echo "API Key presence check (should show as '***'):"
+          echo "$SPOONACULAR_API_KEY"
+          echo "Python environment:"
+          which python
+          python --version
+
+      # Step 5: Run pytest for backend
       - name: Run pytest tests
         run: |
           cd backend
           source venv/bin/activate
-          python -m pytest  # Changed to use python -m pytest
+          python -m pytest -v  # Added -v for verbose output
