@@ -40,6 +40,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: test-frontend # This ensures frontend tests complete before backend tests run
 
+    env:
+      SPOONACULAR_API_KEY: ${{ secrets.SPOONACULAR_API_KEY }}
+
     steps:
       # Step 1: Checkout the code
       - name: Checkout code
