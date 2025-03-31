@@ -2,15 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import recipes
 from dotenv import load_dotenv
-import os
 
-# Try to load from .env file, but don't fail if it doesn't exist
 load_dotenv(dotenv_path="../.env")
-
-# Verify API key is available
-api_key = os.getenv("SPOONACULAR_API_KEY")
-if not api_key:
-    raise ValueError("SPOONACULAR_API_KEY environment variable is not set")
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -20,7 +13,9 @@ app = FastAPI(
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "*",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
