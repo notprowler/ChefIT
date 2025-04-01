@@ -105,7 +105,7 @@ function RecipesPage() {
             className={`
               flex items-center gap-2 px-4 py-2 rounded-lg
               font-medium transition-all duration-200
-              shadow-sm hover:shadow-md
+              shadow-sm hover:shadow-md hover:cursor-pointer
               ${
                 isFilterOpen
                   ? "bg-gray-100 text-gray-700 hover:bg-black hover:text-white"
