@@ -1,0 +1,69 @@
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up the Google Cloud SDK using the latest version (v2.1.4)
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2.1.4
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      # --- Backend Deployment ---
+      - name: Build Backend Docker Image
+        run: |
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/fastapi-backend:latest backend/
+
+      - name: Push Backend Docker Image
+        run: |
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/fastapi-backend:latest
+
+      - name: Deploy Backend to Cloud Run
+        id: deploy-backend
+        run: |
+          gcloud run deploy fastapi-backend \
+            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/fastapi-backend:latest \
+            --region us-east4 \
+            --platform managed \
+            --allow-unauthenticated \
+            --max-instances=1 \
+            --set-env-vars SPOONACULAR_API_KEY=${{ secrets.SPOONACULAR_API_KEY }}
+
+      - name: Retrieve Backend Service URL
+        id: get_backend_url
+        run: |
+          SERVICE_URL=$(gcloud run services describe fastapi-backend --region us-east4 --platform managed --format='value(status.url)')
+          echo "Backend Service URL: ${SERVICE_URL}"
+          echo "service_url=${SERVICE_URL}" >> $GITHUB_OUTPUT
+
+      # --- Frontend Deployment ---
+      - name: Build Frontend Docker Image
+        run: |
+          docker build \
+            --build-arg VITE_BACKEND_URL=${{ steps.get_backend_url.outputs.service_url }} \
+            -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/vite-frontend:latest \
+            frontend/
+
+      - name: Push Frontend Docker Image
+        run: |
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/vite-frontend:latest
+
+      - name: Deploy Frontend to Cloud Run
+        run: |
+          gcloud run deploy vite-frontend \
+            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/vite-frontend:latest \
+            --region us-east4 \
+            --platform managed \
+            --allow-unauthenticated \
+            --max-instances=1

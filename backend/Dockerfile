@@ -1,33 +1,18 @@
-# Use an official Python image
-FROM python:3.12.4
-
-# Accept build argument for version
-ARG VERSION=latest
-# Set version as a label
-LABEL version=$VERSION
-
-# Set environment variable in "KEY=VALUE" format
-ENV PYTHONUNBUFFERED=True
-
-# Create and use a directory for your app
+# Stage 1: Builder
+FROM python:3.12.4 AS builder
 WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
 
-# Upgrade pip
-RUN pip install --upgrade pip
+# Stage 2: Final Image
+FROM python:3.12.4-slim
+WORKDIR /app
+# Copy application code from the builder stage
+COPY --from=builder /app /app
+# Reinstall dependencies in the final image
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy only the requirements file first (for faster caching of pip installs)
-COPY ./requirements.txt /app/requirements.txt
-
-# Install Python dependencies
-RUN pip install --no-cache-dir -r /app/requirements.txt
-
-# Copy the entire project into /app
-# This allows you to have backend, frontend, etc. all in one container
-COPY . /app
-
-# Expose the port (FastAPI default in your code is 8080)
 EXPOSE 8080
 
-# Run the FastAPI app with uvicorn
-# If "main.py" is inside "backend/" and defines `app = FastAPI()`, use "backend.main:app"
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
