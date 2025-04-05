@@ -18,7 +18,7 @@ python3 -m fastapi dev main.py
 Open http://127.0.0.1:8000
 ```
 
-## How to deploy
+## Deployment
 
 ### Prerequisites
 
@@ -26,50 +26,33 @@ Open http://127.0.0.1:8000
 - Docker
 - Google Cloud Run CLI
 
-Build the backend docker image
-
 ```bash
-docker buildx build --platform linux/amd64 -t gcr.io/chefit-453802/chefit:<version> --build-arg VERSION=latest --load .
-```
+# Build and push the backend Docker image
+docker build -t gcr.io/$GCP_PROJECT_ID/fastapi-backend:latest backend/
+docker push gcr.io/$GCP_PROJECT_ID/fastapi-backend:latest
 
-Push the docker image to GCR
-
-```bash
-docker push gcr.io/chefit-453802/chefit:<version>
-```
-
-Deploy docker image to google cloud run
-
-```bash
-gcloud run deploy chefit-service \
-  --image gcr.io/chefit-453802/chefit:<version> \
-  --platform managed \
+# Deploy the backend to Cloud Run (us-east4, max 1 instance) with the SPOONACULAR_API_KEY env variable
+gcloud run deploy fastapi-backend \
+  --image gcr.io/$GCP_PROJECT_ID/fastapi-backend:latest \
   --region us-east4 \
+  --platform managed \
   --allow-unauthenticated \
-  --set-env-vars SPOONACULAR_API_KEY=your_api_key_here \
-  --set-env-vars FRONTEND_URL=frontend_url \
-  --max-instances=1
-```
+  --max-instances=1 \
+  --set-env-vars SPOONACULAR_API_KEY=$SPOONACULAR_API_KEY
 
-Build the frontend docker image
+# Retrieve the backend service URL
+SERVICE_URL=$(gcloud run services describe fastapi-backend --region us-east4 --platform managed --format='value(status.url)')
+echo $SERVICE_URL
 
-```bash
-docker build --platform linux/amd64 -t gcr.io/chefit-453802/chefit-frontend:<version> --build-arg VITE_BACKEND_URL=deployed_backend_url .
-```
+# Build and push the frontend Docker image with the backend URL as a build argument
+docker build --build-arg VITE_BACKEND_URL=$SERVICE_URL -t gcr.io/$GCP_PROJECT_ID/vite-frontend:latest frontend/
+docker push gcr.io/$GCP_PROJECT_ID/vite-frontend:latest
 
-Push the frontend docker image to GCR
-
-```bash
-docker push gcr.io/chefit-453802/chefit-frontend:<frontend-version>
-```
-
-Deploy the frontend docker image to google cloud run
-
-```bash
-gcloud run deploy chefit-frontend \
-  --image gcr.io/chefit-453802/chefit-frontend:<frontend-version> \
-  --platform managed \
+# Deploy the frontend to Cloud Run (us-east4, max 1 instance)
+gcloud run deploy vite-frontend \
+  --image gcr.io/$GCP_PROJECT_ID/vite-frontend:latest \
   --region us-east4 \
+  --platform managed \
   --allow-unauthenticated \
   --max-instances=1
 ```
