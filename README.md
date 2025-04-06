@@ -56,3 +56,5 @@ gcloud run deploy vite-frontend \
   --allow-unauthenticated \
   --max-instances=1
 ```
+
+test
