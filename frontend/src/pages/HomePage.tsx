@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import WorksHowSection from "@/components/WorksHowSection";
+import FeaturedRecipesSection from "@/components/FeaturedRecipesSection";
 import { Link } from "react-router-dom";
 
 function HomePage() {
@@ -9,6 +10,7 @@ function HomePage() {
       <Navbar/>
       <HeroSection />
       < WorksHowSection />
+      <FeaturedRecipesSection />
     </>
   );
 }

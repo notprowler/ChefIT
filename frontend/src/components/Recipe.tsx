@@ -65,7 +65,9 @@ function Recipe({ recipe }: RecipeProps) {
           </div>
         </div>
         <div>
-          <Button className="bg-orange-400 w-full">View Recipe</Button>
+          <button className="bg-orange-400 w-full p-2 rounded-lg hover:cursor-pointer text-white hover:bg-black">
+            View Recipe
+          </button>
         </div>
       </div>
     </div>
