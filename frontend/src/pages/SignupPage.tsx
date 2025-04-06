@@ -1,11 +1,13 @@
-import React from "react";
+// import React from "react";
 
 function SignupPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md rounded-md bg-white p-8 shadow">
         <h1 className="text-center text-2xl font-bold">ChefIT</h1>
-        <h2 className="mt-2 text-center text-xl font-semibold">Create an account</h2>
+        <h2 className="mt-2 text-center text-xl font-semibold">
+          Create an account
+        </h2>
         <p className="mt-1 text-center text-sm text-gray-500">
           Enter your details below to create your account
         </p>
