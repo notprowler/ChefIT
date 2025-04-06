@@ -1,6 +1,5 @@
 import { FaUtensils } from "react-icons/fa";
 import { IoTime } from "react-icons/io5";
-import { Button } from "./ui/button";
 
 interface RecipeProps {
   recipe: {
