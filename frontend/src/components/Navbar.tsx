@@ -11,7 +11,10 @@ const Navbar = () => {
     <nav className="fixed top-0 w-full bg-white shadow-md z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex flex-row items-center gap-4">
+          <div
+            className="flex flex-row items-center gap-4"
+            data-testid="logo-container"
+          >
             <PiChefHatBold className="w-8 h-8" />
             <Link to="/" className="text-2xl font-bold text-orange-400">
               ChefIt
@@ -49,10 +52,11 @@ const Navbar = () => {
 
         {/* Mobile Navigation Menu */}
         {isOpen && (
-          <div className="md:hidden">
+          <div className="md:hidden" role="navigation" aria-label="mobile menu">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t">
               <Link
                 to="/"
+                role="hidden-menu-home"
                 className="block px-3 py-2 text-gray-700 hover:text-orange-400 transition-colors"
                 onClick={() => setIsOpen(false)}
               >
