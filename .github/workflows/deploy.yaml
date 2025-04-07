@@ -32,7 +32,7 @@ jobs:
       # --- Backend Deployment ---
       - name: Build Backend Docker Image
         run: |
-          docker buildx build --platform linux/amd64 -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/fastapi-backend:latest backend/
+          docker buildx build --platform linux/amd64 -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/fastapi-backend:latest ./backend
 
       - name: Push Backend Docker Image
         run: |
@@ -63,7 +63,7 @@ jobs:
             --platform linux/amd64 \
             --build-arg VITE_BACKEND_URL=${{ steps.get_backend_url.outputs.service_url }} \
             -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/vite-frontend:latest \
-            frontend/
+            ./frontend
 
       - name: Push Frontend Docker Image
         run: |
