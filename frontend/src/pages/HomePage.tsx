@@ -3,6 +3,8 @@ import HeroSection from "@/components/HeroSection";
 import WorksHowSection from "@/components/WorksHowSection";
 import FeaturedRecipesSection from "@/components/FeaturedRecipesSection";
 import { Link } from "react-router-dom";
+import CallToActionSection from "@/components/CallToActionSection";
+import Footer from "@/components/Footer";
 
 function HomePage() {
   return (
@@ -11,6 +13,8 @@ function HomePage() {
       <HeroSection />
       < WorksHowSection />
       <FeaturedRecipesSection />
+      <CallToActionSection />
+      <Footer />
     </>
   );
 }
