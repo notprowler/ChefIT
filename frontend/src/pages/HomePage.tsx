@@ -1,21 +1,21 @@
 import Navbar from "@/components/Navbar";
+import HeroSection from "@/components/HeroSection";
+import WorksHowSection from "@/components/WorksHowSection";
+import FeaturedRecipesSection from "@/components/FeaturedRecipesSection";
 import { Link } from "react-router-dom";
+import CallToActionSection from "@/components/CallToActionSection";
+import Footer from "@/components/Footer";
 
 function HomePage() {
   return (
-    <div className="pt-16">
-      <Navbar />
-      <h1>Chef it home</h1>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/recipes" className="text-lg font-bold">
-              Recipes
-            </Link>
-          </li>
-        </ul>
-      </nav>
-    </div>
+    <>
+      <Navbar/>
+      <HeroSection />
+      < WorksHowSection />
+      <FeaturedRecipesSection />
+      <CallToActionSection />
+      <Footer />
+    </>
   );
 }
 
