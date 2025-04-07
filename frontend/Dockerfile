@@ -5,7 +5,7 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 
-# Pass the VITE_SERVER_URL as a build argument
+# Pass the VITE_BACKEND_URL as a build argument
 ARG VITE_BACKEND_URL
 
 # Set the environment variable during the build

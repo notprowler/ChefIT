@@ -38,3 +38,25 @@ async def get_random_recipes():
     except RequestException as e:
         raise HTTPException(
             status_code=500, detail=f"Error calling Spoonacular API: {str(e)}")
+
+
+@router.get("/recipes/search-by-ingredients")
+async def search_recipes_by_ingredients(ingredients: str):
+    """
+    Search recipes based on available ingredients.
+    :param ingredients: Comma-separated list of ingredients.
+    """
+    try:
+        response = get(
+            "https://api.spoonacular.com/recipes/findByIngredients",
+            params={
+                "apiKey": getenv("SPOONACULAR_API_KEY"),
+                "ingredients": ingredients,
+                "number": 10,
+            },
+        )
+        return response.json()
+
+    except RequestException as e:
+        raise HTTPException(
+            status_code=500, detail=f"Error calling Spoonacular API: {str(e)}")
