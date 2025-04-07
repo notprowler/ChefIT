@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - daniel/deploy
 
 jobs:
   deploy:
@@ -24,7 +25,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          
+
       # Set up Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
