@@ -91,4 +91,19 @@ jobs:
             --region us-east4 \
             --platform managed \
             --allow-unauthenticated \
-            --max-instances=1
+            --max-instances=1 \
+            --service-account=${{ secrets.GCP_SERVICE_ACCOUNT }} \
+            --ingress=all
+
+      - name: Display Frontend URL
+        run: |
+          FRONTEND_URL=$(gcloud run services describe vite-frontend --region us-east4 --platform managed --format='value(status.url)')
+          echo "Frontend available at: ${FRONTEND_URL}"
+
+      # Uncomment and configure these steps when you have a custom domain
+      # - name: Map Custom Domain to Frontend
+      #   run: |
+      #     gcloud beta run domain-mappings create \
+      #       --service vite-frontend \
+      #       --domain your-domain.com \
+      #       --region us-east4
