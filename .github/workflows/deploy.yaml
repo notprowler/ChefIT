@@ -24,11 +24,15 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
+          
+      # Set up Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
       # --- Backend Deployment ---
       - name: Build Backend Docker Image
         run: |
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/fastapi-backend:latest backend/
+          docker buildx build --platform linux/amd64 -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/fastapi-backend:latest backend/
 
       - name: Push Backend Docker Image
         run: |
@@ -55,7 +59,8 @@ jobs:
       # --- Frontend Deployment ---
       - name: Build Frontend Docker Image
         run: |
-          docker build \
+          docker buildx build \
+            --platform linux/amd64 \
             --build-arg VITE_BACKEND_URL=${{ steps.get_backend_url.outputs.service_url }} \
             -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/vite-frontend:latest \
             frontend/
