@@ -2,16 +2,15 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import WorksHowSection from "@/components/WorksHowSection";
 import FeaturedRecipesSection from "@/components/FeaturedRecipesSection";
-import { Link } from "react-router-dom";
 import CallToActionSection from "@/components/CallToActionSection";
 import Footer from "@/components/Footer";
 
 function HomePage() {
   return (
     <>
-      <Navbar/>
+      <Navbar />
       <HeroSection />
-      < WorksHowSection />
+      <WorksHowSection />
       <FeaturedRecipesSection />
       <CallToActionSection />
       <Footer />
