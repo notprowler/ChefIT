@@ -33,7 +33,7 @@ const Navbar = () => {
             </Button>
           </div>
 
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-6">
             <Link
               to="/"
               className="text-gray-700 hover:text-orange-400 transition-colors"
@@ -46,7 +46,10 @@ const Navbar = () => {
             >
               Recipes
             </Link>
-            <Button className="w-24">Log In</Button>
+            <Link to="/signup">
+              <Button className="w-20">Sign Up</Button>
+            </Link>
+            <Button className="w-20">Log In</Button>
           </div>
         </div>
 
@@ -68,6 +71,11 @@ const Navbar = () => {
                 onClick={() => setIsOpen(false)}
               >
                 Recipes
+              </Link>
+              <Link to="/signup">
+                <div className="px-3 py-2">
+                  <Button>Sign up</Button>
+                </div>
               </Link>
               <div className="px-3 py-2">
                 <Button>Log In</Button>

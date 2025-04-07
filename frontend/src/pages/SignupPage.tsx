@@ -75,11 +75,11 @@ function SignupPage() {
             />
             <label htmlFor="terms" className="text-sm text-gray-700">
               I agree to the{" "}
-              <a href="#" className="text-green-600 hover:underline">
+              <a href="#" className="text-orange-400 hover:underline">
                 terms of service
               </a>{" "}
               and{" "}
-              <a href="#" className="text-green-600 hover:underline">
+              <a href="#" className="text-orange-400 hover:underline">
                 privacy policy
               </a>
             </label>
@@ -88,8 +88,8 @@ function SignupPage() {
           {/* Create Account Button */}
           <button
             type="submit"
-            className="w-full rounded bg-green-600 py-2 text-sm font-medium text-white
-                       hover:bg-green-700 focus:outline-none focus:ring-2
+            className="w-full rounded bg-orange-400 py-2 text-sm font-medium text-white
+                       hover:bg-orange-600 focus:outline-none focus:ring-2
                        focus:ring-green-600 focus:ring-offset-2"
           >
             Create Account
@@ -126,7 +126,7 @@ function SignupPage() {
         {/* Sign In Link */}
         <p className="mt-6 text-center text-sm text-gray-600">
           Already have an account?{" "}
-          <a href="#" className="text-green-600 hover:underline">
+          <a href="#" className="text-orange-400 hover:underline">
             Sign in
           </a>
         </p>
