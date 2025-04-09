@@ -1,0 +1,25 @@
+erDiagram
+    USER ||--o{ RECIPE : creates
+    USER ||--o{ FAVORITE_RECIPE : favorites
+    RECIPE ||--o{ FAVORITE_RECIPE : is_favorited
+
+    USER {
+        uuid id PK
+        string email
+        datetime created_at
+    }
+
+    RECIPE {
+        int id PK
+        string title
+        string description
+        text instructions
+        string image_url
+        datetime created_at
+    }
+
+    FAVORITE_RECIPE {
+        uuid user_id PK, FK
+        int recipe_id PK, FK
+        datetime favorited_at
+    }

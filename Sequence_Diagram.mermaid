@@ -1,0 +1,19 @@
+sequenceDiagram
+    participant ChefItUser as ChefIt User
+    participant ChefItFrontend as ChefIt Frontend Application
+    participant ChefItAPI as ChefIt API Server
+    participant ChefItDatabase as ChefIt Database Server
+
+    ChefItUser->>ChefItFrontend: Opens ChefIt application
+    ChefItFrontend->>ChefItAPI: Request list of recipes (GET /recipes)
+    ChefItAPI->>ChefItDatabase: Query for all recipes
+    ChefItDatabase-->>ChefItAPI: Return recipes data
+    ChefItAPI-->>ChefItFrontend: Send recipes data
+    ChefItFrontend-->>ChefItUser: Display recipe list
+
+    ChefItUser->>ChefItFrontend: Selects "Favorite" for a recipe
+    ChefItFrontend->>ChefItAPI: Send favorite request (POST /favorite with user_id & recipe_id)
+    ChefItAPI->>ChefItDatabase: Insert record in FAVORITE_RECIPE (using composite key: user_id, recipe_id)
+    ChefItDatabase-->>ChefItAPI: Confirm favorite insertion
+    ChefItAPI-->>ChefItFrontend: Confirm favorite action
+    ChefItFrontend-->>ChefItUser: Notify that recipe is favorited
