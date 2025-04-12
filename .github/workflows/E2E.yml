@@ -26,13 +26,13 @@ jobs:
           npm install @rollup/rollup-linux-x64-gnu
 
       - name: Build the project
-        run: npm run build
+        run: cd frontend && npm run build
 
       - name: Start preview server
-        run: npm run preview &
+        run: cd frontend && npm run preview
 
       - name: Wait for server to be ready
         run: npx wait-on http://localhost:4173
 
       - name: Run Cypress tests
-        run: npm run cy:run
+        run: cd frontend && npm run cy:run
