@@ -49,7 +49,7 @@ jobs:
         run: |
           cd backend
           source venv/bin/activate
-          python3 -m fastapi dev main.py
+          python3 -m fastapi dev main.py &
 
       - name: Wait for server to be ready
         run: npx wait-on http://localhost:4173
