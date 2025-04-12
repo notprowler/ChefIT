@@ -29,7 +29,7 @@ jobs:
         run: cd frontend && npm run build
 
       - name: Start preview server
-        run: cd frontend && npm run preview
+        run: cd frontend && npm run preview &
 
       - name: Wait for server to be ready
         run: npx wait-on http://localhost:4173
