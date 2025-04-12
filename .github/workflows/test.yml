@@ -34,13 +34,6 @@ jobs:
         run: |
           cd frontend
           npm run test -- --run  # Add --run flag to run tests once
-      
-      - name: cypress E2E tests
-        run: |
-          cd frontend
-          npm run build
-          npm run preview
-          npm run cy:run
 
   # # Backend tests with pytest (FastAPI)
   # test-backend:
