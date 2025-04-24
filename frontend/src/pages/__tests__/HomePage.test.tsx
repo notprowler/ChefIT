@@ -65,7 +65,9 @@ describe("HomePage", () => {
     await act(async () => {
       renderHomePage();
     });
-    const recipesLink = await screen.findByRole("link", { name: /Find Recipes/i });
+    const recipesLink = await screen.findByRole("link", {
+      name: /Find Recipes/i,
+    });
     expect(recipesLink).toBeInTheDocument();
     expect(recipesLink).toHaveAttribute("href", "/recipes");
   });
