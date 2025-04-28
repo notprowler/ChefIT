@@ -1,22 +1,21 @@
 import { useState } from "react";
-import { signUp } from "@/services/authService";
+import { signIn } from "@/services/authService";
 import { Link, useNavigate } from "react-router-dom";
 
-function SignupPage() {
-  const [name, setName] = useState(""); // We'll still collect name (optional for now)
+function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { error } = await signUp(email, password);
+    const { error } = await signIn(email, password);
 
     if (error) {
       alert(error.message);
     } else {
-      alert("Signup successful! Please check your email to verify.");
-      navigate("/login");
+      alert("Login successful!");
+      navigate("/");
     }
   };
 
@@ -24,34 +23,13 @@ function SignupPage() {
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md rounded-md bg-white p-8 shadow">
         <h1 className="text-center text-2xl font-bold">ChefIT</h1>
-        <h2 className="mt-2 text-center text-xl font-semibold">
-          Create an account
-        </h2>
+        <h2 className="mt-2 text-center text-xl font-semibold">Welcome Back</h2>
         <p className="mt-1 text-center text-sm text-gray-500">
-          Enter your details below to create your account
+          Enter your details below to log in
         </p>
 
         {/* Form */}
-        <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
-          {/* Name */}
-          <div>
-            <label
-              htmlFor="name"
-              className="mb-1 block text-sm font-medium text-gray-700"
-            >
-              Name
-            </label>
-            <input
-              id="name"
-              type="text"
-              placeholder="Your name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full rounded border border-gray-300 px-3 py-2 text-sm
-                         focus:outline-none focus:ring-2 focus:ring-green-600"
-            />
-          </div>
-
+        <form className="mt-6 space-y-5" onSubmit={handleLogin}>
           {/* Email */}
           <div>
             <label
@@ -90,14 +68,14 @@ function SignupPage() {
             />
           </div>
 
-          {/* Create Account Button */}
+          {/* Login Button */}
           <button
             type="submit"
             className="w-full rounded bg-orange-400 py-2 text-sm font-medium text-white
                        hover:bg-orange-600 focus:outline-none focus:ring-2
                        focus:ring-green-600 focus:ring-offset-2"
           >
-            Create Account
+            Login
           </button>
         </form>
 
@@ -108,10 +86,11 @@ function SignupPage() {
           <div className="h-px flex-1 bg-gray-300"></div>
         </div>
 
-        {/* Other Sign Up Options */}
+        {/* Other Login Options (disabled for now) */}
         <div className="flex space-x-4">
           <button
             type="button"
+            disabled
             className="flex w-1/2 items-center justify-center space-x-2
                        rounded border border-gray-300 py-2 text-sm
                        bg-gray-200 cursor-not-allowed"
@@ -120,6 +99,7 @@ function SignupPage() {
           </button>
           <button
             type="button"
+            disabled
             className="flex w-1/2 items-center justify-center space-x-2
                        rounded border border-gray-300 py-2 text-sm
                        bg-gray-200 cursor-not-allowed"
@@ -128,12 +108,12 @@ function SignupPage() {
           </button>
         </div>
 
-        {/* Sign In Link */}
+        {/* Sign Up Link */}
         <p className="mt-6 text-center text-sm text-gray-600">
-          Already have an account?{" "}
-          <Link to="/login">
+          Don't have an account?{" "}
+          <Link to="/signup">
             <a href="#" className="text-orange-400 hover:underline">
-              Sign in
+              Sign up
             </a>
           </Link>
         </p>
@@ -149,4 +129,4 @@ function SignupPage() {
   );
 }
 
-export default SignupPage;
+export default LoginPage;
