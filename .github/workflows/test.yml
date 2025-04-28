@@ -29,6 +29,11 @@ jobs:
           npm install
           npm install @rollup/rollup-linux-x64-gnu  # Add this explicitly
 
+      - name: check for secrets supabase
+        run: |
+          echo "Supabase url = ${{ secrets.VITE_SUPABASE_URL }}"
+          echo "supabase anon key = ${{ secrets.VITE_SUPABASE_ANON_KEY }}"
+
       # Step 4: Run Vitest tests for frontend
       - name: Run Vitest tests
         run: |
@@ -41,7 +46,7 @@ jobs:
   #   needs: test-frontend # This ensures frontend tests complete before backend tests run
 
   #   env:
-  #     SPOONACULAR_API_KEY: ${{ secrets.SPOONACULAR_API_KEY }}
+  #     SPOONACULAR_API_KEY: $ {{ secrets.SPOONACULAR_API_KEY }}
 
   #   steps:
   #     # Step 1: Checkout the code
