@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Recipe from "../components/Recipe";
 import Navbar from "@/components/Navbar";
+import IngredientSearchDropdown from "@/components/IngredientSearchDropdown";
 
 interface RecipeType {
   id: number;
@@ -35,7 +36,23 @@ function RecipesPage() {
     maxTime: "",
     servings: "",
   });
-
+  const searchRecipes = async (ingredients: string[]) => {
+    if (!ingredients.length) return;
+    setLoading(true);
+    try {
+      const query = ingredients.join(",");
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/recipes/search-by-ingredients?ingredients=${query}`
+      );
+      const data: RecipeType[] = await response.json();
+      setRecipes(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error("Error fetching recipes:", error);
+      setRecipes([]);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
@@ -131,6 +148,9 @@ function RecipesPage() {
             </svg>
             {isFilterOpen ? "Hide Filters" : "Show Filters"}
           </button>
+
+          <IngredientSearchDropdown onSearch={searchRecipes} />
+
           {(filters.vegan ||
             filters.vegetarian ||
             filters.glutenFree ||
