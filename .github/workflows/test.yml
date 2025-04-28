@@ -34,6 +34,12 @@ jobs:
           echo "Supabase url = ${{ secrets.VITE_SUPABASE_URL }}"
           echo "supabase anon key = ${{ secrets.VITE_SUPABASE_ANON_KEY }}"
 
+      - name: Create .env file
+        run: |
+          cd frontend
+          echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" >> .env
+          echo "VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}" >> .env
+
       # Step 4: Run Vitest tests for frontend
       - name: Run Vitest tests
         run: |
