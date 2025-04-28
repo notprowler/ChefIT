@@ -117,6 +117,13 @@ function LoginPage() {
             </a>
           </Link>
         </p>
+        <p className="mt-6 text-center text-sm text-gray-600">
+          <Link to="/">
+            <a href="#" className="text-orange-400 hover:underline">
+              Home
+            </a>
+          </Link>
+        </p>
       </div>
     </div>
   );
