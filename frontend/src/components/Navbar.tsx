@@ -3,9 +3,20 @@ import { Button } from "./ui/button";
 import { Menu } from "lucide-react";
 import { useState } from "react";
 import { PiChefHatBold } from "react-icons/pi";
+import { useAuth } from "@/contexts/AuthContext";
+import { signOut } from "@/services/authService";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { user } = useAuth(); // Get current user
+
+  const handleSignOut = async () => {
+    const { error } = await signOut();
+    if (error) {
+      alert(error.message);
+    }
+  };
 
   return (
     <nav className="fixed top-0 w-full bg-white shadow-md z-50">
@@ -46,10 +57,20 @@ const Navbar = () => {
             >
               Recipes
             </Link>
-            <Link to="/signup">
-              <Button className="w-20">Sign Up</Button>
-            </Link>
-            <Button className="w-20">Log In</Button>
+            {user ? (
+              <Button onClick={handleSignOut} className="w-20">
+                Sign Out
+              </Button>
+            ) : (
+              <>
+                <Link to="/signup">
+                  <Button className="w-20">Sign Up</Button>
+                </Link>
+                <Link to="/login">
+                  <Button className="w-20">Log In</Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
 
@@ -72,14 +93,24 @@ const Navbar = () => {
               >
                 Recipes
               </Link>
-              <Link to="/signup">
+              {user ? (
                 <div className="px-3 py-2">
-                  <Button>Sign up</Button>
+                  <Button onClick={handleSignOut}>Sign Out</Button>
                 </div>
-              </Link>
-              <div className="px-3 py-2">
-                <Button>Log In</Button>
-              </div>
+              ) : (
+                <>
+                  <Link to="/signup">
+                    <div className="px-3 py-2">
+                      <Button>Sign up</Button>
+                    </div>
+                  </Link>
+                  <Link to="/login">
+                    <div className="px-3 py-2">
+                      <Button>Log In</Button>
+                    </div>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         )}

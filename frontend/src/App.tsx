@@ -3,6 +3,7 @@ import "./App.css";
 import RecipesPage from "./pages/RecipesPage";
 import HomePage from "./pages/HomePage";
 import SignupPage from "./pages/SignupPage";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/recipes" element={<RecipesPage />} />
       <Route path="/signup" element={<SignupPage />} />
+      <Route path="/login" element={<LoginPage />} />
     </Routes>
   );
 }
