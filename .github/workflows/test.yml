@@ -29,11 +29,6 @@ jobs:
           npm install
           npm install @rollup/rollup-linux-x64-gnu  # Add this explicitly
 
-      - name: check for secrets supabase
-        run: |
-          echo "Supabase url = ${{ secrets.VITE_SUPABASE_URL }}"
-          echo "supabase anon key = ${{ secrets.VITE_SUPABASE_ANON_KEY }}"
-
       - name: Create .env file
         run: |
           cd frontend
