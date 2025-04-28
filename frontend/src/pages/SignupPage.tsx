@@ -90,26 +90,6 @@ function SignupPage() {
             />
           </div>
 
-          {/* Terms Checkbox */}
-          <div className="flex items-center space-x-2">
-            <input
-              id="terms"
-              type="checkbox"
-              className="h-4 w-4 rounded border-gray-300 text-green-600
-                         focus:ring-0 focus:ring-offset-0"
-            />
-            <label htmlFor="terms" className="text-sm text-gray-700">
-              I agree to the{" "}
-              <a href="#" className="text-orange-400 hover:underline">
-                terms of service
-              </a>{" "}
-              and{" "}
-              <a href="#" className="text-orange-400 hover:underline">
-                privacy policy
-              </a>
-            </label>
-          </div>
-
           {/* Create Account Button */}
           <button
             type="submit"
@@ -154,6 +134,13 @@ function SignupPage() {
           <Link to="/login">
             <a href="#" className="text-orange-400 hover:underline">
               Sign in
+            </a>
+          </Link>
+        </p>
+        <p className="mt-6 text-center text-sm text-gray-600">
+          <Link to="/">
+            <a href="#" className="text-orange-400 hover:underline">
+              Home
             </a>
           </Link>
         </p>
