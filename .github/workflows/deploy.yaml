@@ -79,6 +79,8 @@ jobs:
           platforms: linux/amd64
           build-args: |
             VITE_BACKEND_URL=${{ steps.get_backend_url.outputs.service_url }}
+            VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}
+            VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}
 
       - name: Deploy Frontend to Cloud Run
         run: |
@@ -89,7 +91,9 @@ jobs:
             --allow-unauthenticated \
             --max-instances=1 \
             --service-account=${{ secrets.GCP_SERVICE_ACCOUNT }} \
-            --ingress=all
+            --ingress=all \
+            --set-env-vars VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }} \
+            --set-env-vars VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}
 
       - name: Display Frontend URL
         run: |
