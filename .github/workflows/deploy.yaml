@@ -79,6 +79,13 @@ jobs:
           echo "service_url=${SERVICE_URL}" >> $GITHUB_OUTPUT
 
       # --- Frontend Deployment ---
+      - name: Debug Environment Variables
+        run: |
+          echo "Checking environment variables before build..."
+          echo "VITE_BACKEND_URL exists: ${{ steps.get_backend_url.outputs.service_url != '' }}"
+          echo "VITE_SUPABASE_URL exists: ${{ secrets.VITE_SUPABASE_URL != '' }}"
+          echo "VITE_SUPABASE_ANON_KEY exists: ${{ secrets.VITE_SUPABASE_ANON_KEY != '' }}"
+
       - name: Build and Push Frontend Docker Image
         uses: docker/build-push-action@v5
         with:
@@ -122,8 +129,29 @@ jobs:
             --allow-unauthenticated \
             --max-instances=1 \
             --service-account="${{ secrets.GCP_SERVICE_ACCOUNT }}" \
-            --ingress=all \
-            --set-env-vars="VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }},VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}"
+            --ingress=all
+
+      - name: Verify Deployed Environment Variables
+        run: |
+          # Get the service details and check environment variables
+          SERVICE_DETAILS=$(gcloud run services describe vite-frontend --region us-east4 --platform managed --format='json')
+
+          # Extract environment variables
+          ENV_VARS=$(echo $SERVICE_DETAILS | jq -r '.spec.template.spec.containers[0].env[] | "\(.name)=\(.value)"')
+
+          # Check for required variables
+          if ! echo "$ENV_VARS" | grep -q "VITE_SUPABASE_URL"; then
+            echo "Error: VITE_SUPABASE_URL not found in deployed service"
+            exit 1
+          fi
+
+          if ! echo "$ENV_VARS" | grep -q "VITE_SUPABASE_ANON_KEY"; then
+            echo "Error: VITE_SUPABASE_ANON_KEY not found in deployed service"
+            exit 1
+          fi
+
+          echo "Environment variables verified in deployed service:"
+          echo "$ENV_VARS"
 
       - name: Display Frontend URL
         run: |

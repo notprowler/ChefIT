@@ -5,11 +5,15 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 
-# Pass the VITE_BACKEND_URL as a build argument
+# Pass all Vite environment variables as build arguments
 ARG VITE_BACKEND_URL
+ARG VITE_SUPABASE_URL
+ARG VITE_SUPABASE_ANON_KEY
 
-# Set the environment variable during the build
+# Set the environment variables during the build
 ENV VITE_BACKEND_URL=${VITE_BACKEND_URL}
+ENV VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+ENV VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
 
 RUN npm run build
 
