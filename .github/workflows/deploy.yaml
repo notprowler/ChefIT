@@ -65,14 +65,7 @@ jobs:
       - name: Deploy Backend to Cloud Run
         id: deploy-backend
         run: |
-          gcloud run deploy fastapi-backend \
-            --image gcr.io/${{ env.GCP_PROJECT_ID }}/fastapi-backend:latest \
-            --region us-east4 \
-            --platform managed \
-            --allow-unauthenticated \
-            --max-instances=1 \
-            --set-env-vars SPOONACULAR_API_KEY=${{ secrets.SPOONACULAR_API_KEY }} \
-            --timeout=300s
+          gcloud run deploy fastapi-backend --image gcr.io/${{ env.GCP_PROJECT_ID }}/fastapi-backend:latest --region us-east4 --platform managed --allow-unauthenticated --max-instances=1 --set-env-vars SPOONACULAR_API_KEY=${{ secrets.SPOONACULAR_API_KEY }}
 
       - name: Retrieve Backend Service URL
         id: get_backend_url
