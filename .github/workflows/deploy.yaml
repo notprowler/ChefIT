@@ -116,7 +116,7 @@ jobs:
             --platform managed \
             --allow-unauthenticated \
             --max-instances=1 \
-            --service-account=${{ secrets.GCP_SERVICE_ACCOUNT }} \
+            --service-account="${{ secrets.GCP_SERVICE_ACCOUNT }}" \
             --ingress=all \
             --set-env-vars VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }} \
             --set-env-vars VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }} \
