@@ -101,6 +101,18 @@ jobs:
             exit 1
           fi
 
+      - name: Verify Environment Variables
+        run: |
+          if [ -z "${{ secrets.VITE_SUPABASE_URL }}" ]; then
+            echo "Error: VITE_SUPABASE_URL is not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.VITE_SUPABASE_ANON_KEY }}" ]; then
+            echo "Error: VITE_SUPABASE_ANON_KEY is not set"
+            exit 1
+          fi
+          echo "Environment variables are properly set"
+
       - name: Deploy Frontend to Cloud Run
         run: |
           gcloud run deploy vite-frontend \
@@ -111,9 +123,7 @@ jobs:
             --max-instances=1 \
             --service-account="${{ secrets.GCP_SERVICE_ACCOUNT }}" \
             --ingress=all \
-            --set-env-vars VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }} \
-            --set-env-vars VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }} \
-            --timeout=300s
+            --set-env-vars="VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }},VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}"
 
       - name: Display Frontend URL
         run: |
