@@ -43,6 +43,28 @@ jobs:
       - name: Set env variables
         run: echo "GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}" >> $GITHUB_ENV
 
+      - name: Verify Environment Variables
+        run: |
+          # Get the service details and check environment variables
+          SERVICE_DETAILS=$(gcloud run services describe vite-frontend --region us-east4 --platform managed --format='json')
+
+          # Extract environment variables
+          ENV_VARS=$(echo $SERVICE_DETAILS | jq -r '.spec.template.spec.containers[0].env[] | "\(.name)=\(.value)"')
+
+          # Check for required variables
+          if ! echo "$ENV_VARS" | grep -q "VITE_SUPABASE_URL"; then
+            echo "Error: VITE_SUPABASE_URL not found in deployed service"
+            exit 1
+          fi
+
+          if ! echo "$ENV_VARS" | grep -q "VITE_SUPABASE_ANON_KEY"; then
+            echo "Error: VITE_SUPABASE_ANON_KEY not found in deployed service"
+            exit 1
+          fi
+
+          echo "Environment variables verified in deployed service:"
+          echo "$ENV_VARS"
+
       # --- Backend Deployment ---
       - name: Build and Push Backend Docker Image
         uses: docker/build-push-action@v5
@@ -130,28 +152,6 @@ jobs:
             --max-instances=1 \
             --service-account="${{ secrets.GCP_SERVICE_ACCOUNT }}" \
             --ingress=all
-
-      - name: Verify Deployed Environment Variables
-        run: |
-          # Get the service details and check environment variables
-          SERVICE_DETAILS=$(gcloud run services describe vite-frontend --region us-east4 --platform managed --format='json')
-
-          # Extract environment variables
-          ENV_VARS=$(echo $SERVICE_DETAILS | jq -r '.spec.template.spec.containers[0].env[] | "\(.name)=\(.value)"')
-
-          # Check for required variables
-          if ! echo "$ENV_VARS" | grep -q "VITE_SUPABASE_URL"; then
-            echo "Error: VITE_SUPABASE_URL not found in deployed service"
-            exit 1
-          fi
-
-          if ! echo "$ENV_VARS" | grep -q "VITE_SUPABASE_ANON_KEY"; then
-            echo "Error: VITE_SUPABASE_ANON_KEY not found in deployed service"
-            exit 1
-          fi
-
-          echo "Environment variables verified in deployed service:"
-          echo "$ENV_VARS"
 
       - name: Display Frontend URL
         run: |
