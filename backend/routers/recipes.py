@@ -7,14 +7,10 @@ router = APIRouter()
 
 from os import getenv
 
-api_key = getenv("SPOONACULAR_API_KEY")
-if not api_key:
-    raise RuntimeError("SPOONACULAR_API_KEY is not set.")
-print("API Key is loaded:", bool(api_key))
-
-
 @router.get("/recipes/{recipe_id}")
 async def get_single_recipe(recipe_id: int):
+    print("SPOONACULAR_API_KEY =", getenv("SPOONACULAR_API_KEY"))
+
     try:
         response = get(
             f"https://api.spoonacular.com/recipes/{recipe_id}/information",
