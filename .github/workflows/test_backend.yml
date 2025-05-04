@@ -31,14 +31,14 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install -r requirements.txt
-          pip install pytest  # Add this line explicitly
+          pip install pytest
 
       # Step 4: Debug Environment
       - name: Debug Environment
         run: |
           cd backend
           source venv/bin/activate
-          echo "API Key presence check (should show as '***'):"
+          echo "API Key presence check:"
           echo "$SPOONACULAR_API_KEY"
           echo "Python environment:"
           which python
@@ -50,4 +50,4 @@ jobs:
           cd backend
           source venv/bin/activate
           export SPOONACULAR_API_KEY=${{ secrets.SPOONACULAR_API_KEY }}
-          python -m pytest -v  # Added -v for verbose output
+          python -m pytest -v

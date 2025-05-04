@@ -9,8 +9,6 @@ from os import getenv
 
 @router.get("/recipes/{recipe_id}")
 async def get_single_recipe(recipe_id: int):
-    print("SPOONACULAR_API_KEY =", getenv("SPOONACULAR_API_KEY"))
-
     try:
         response = get(
             f"https://api.spoonacular.com/recipes/{recipe_id}/information",
