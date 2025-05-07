@@ -11,6 +11,7 @@ async def search_recipes_by_ingredients(ingredients: str):
     Search recipes based on available ingredients.
     :param ingredients: Comma-separated list of ingredients.
     """
+
     try:
         response = get(
             "https://api.spoonacular.com/recipes/findByIngredients",
