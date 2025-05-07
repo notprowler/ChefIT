@@ -13,8 +13,8 @@ const IngredientSearchBar: React.FC<IngredientSearchBarProps> = ({
   // Add a new ingredient to the list
   const handleAddIngredient = () => {
     const trimmedValue = inputValue.trim();
-    if (!trimmedValue) return;
-    setIngredients((prev) => [...prev, trimmedValue]);
+    if (!trimmedValue || ingredients.includes(trimmedValue.toLowerCase())) return;
+    setIngredients((prev) => [...prev, trimmedValue.toLowerCase()]);
     setInputValue("");
   };
 
