@@ -38,21 +38,19 @@ function IndividualRecipePage() {
           </div>
 
           {/* Image */}
-          <div className="flex justify-left">
-            {recipe.image ? (
-            <img
-                src={recipe.image}
-                alt={recipe.title}
-                className="w-full max-w-[600px] h-[400px] md:h-[500px] object-cover aspect-[4/3] rounded-2xl shadow-2xl"
-            />
-            ) : (
-            <div className="w-full max-w-[600px] h-[400px] md:h-[500px] object-cover aspect-[4/3] rounded-2xl shadow-2xl>
-            <p className="text-gray-500">No image available</p>
-            </div>
-         )}
-        </div>
-
-
+<div className="flex justify-left">
+  {recipe.image ? (
+    <img
+      src={recipe.image}
+      alt={recipe.title}
+      className="w-full max-w-[600px] h-[400px] md:h-[500px] object-cover aspect-[4/3] rounded-2xl shadow-2xl"
+    />
+  ) : (
+    <div className="w-full max-w-[600px] h-[400px] md:h-[500px] object-cover aspect-[4/3] rounded-2xl shadow-2xl">
+      <p className="text-gray-500">No image available</p>
+    </div>
+  )}
+</div>
 
           {/* Summary */}
           {recipe.summary && (
