@@ -79,7 +79,7 @@ function IndividualRecipePage() {
       </header>
 
       {/* Main Grid */}
-      <div className="grid grid-cols-[minmax(0,1fr)_320px]">
+      <div className="grid grid-cols-[minmax(0,1fr)_320px] gap-12">
         {/* MAIN COLUMN */}
         <article className="">
           {/* Hero image */}
