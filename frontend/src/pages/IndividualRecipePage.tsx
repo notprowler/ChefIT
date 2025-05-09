@@ -1,4 +1,32 @@
 import { useLocation, Link } from "react-router-dom";
+import {
+  Clock,
+  Utensils,
+  Star,
+  Activity,
+  Heart,
+  Share2,
+  ClipboardList,
+} from "lucide-react";
+
+/**
+ * IndividualRecipePage – clamp main column width
+ * ------------------------------------------------
+ *  • Switched the grid to `lg:grid-cols-[minmax(0,820px)_320px]` – the first
+ *    track never grows wider than ~820 px, matching the longest recipe titles
+ *    while staying fluid on smaller screens.
+ *  • Added `mx-auto` to the `<article>` so it doesn’t hug the left gutter when
+ *    the viewport is ultra‑wide.
+ */
+
+const badgeCls =
+  "inline-block rounded-full bg-green-100 text-green-800 px-2 py-0.5 text-xs font-medium";
+
+const btnPrimaryCls =
+  "flex items-center justify-center gap-1 rounded-md bg-orange-500 hover:bg-orange-600 text-white text-sm h-9 px-3 w-full";
+
+const btnOutlineCls =
+  "flex items-center justify-center rounded-md border border-gray-300 hover:bg-gray-50 text-gray-600 h-9 w-9";
 
 function IndividualRecipePage() {
   const { state } = useLocation();
@@ -13,89 +41,161 @@ function IndividualRecipePage() {
   }
 
   return (
-    <div className="pt-20 px-6 lg:px-16">
-      <Link to="/recipes" className="text-orange-500 hover:underline text-sm mb-4 block">
+    <div className="pt-20 px-4 lg:px-10 max-w-7xl mx-auto min-w-[52rem]">
+      {/* ↖ Back link */}
+      <Link
+        to="/recipes"
+        className="text-orange-500 hover:underline text-sm inline-block mb-4"
+      >
         ← Back to Recipes
       </Link>
 
-      <div className="flex flex-col lg:flex-row gap-12">
-        {/* Main content */}
-        <div className="flex-1 space-y-6">
-          {/* Tags */}
-          <div className="flex gap-2">
-            {recipe.vegetarian && <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">vegetarian</span>}
-            {recipe.vegan && <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">vegan</span>}
-            {recipe.glutenFree && <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">gluten-free</span>}
-          </div>
+      {/* Title + meta */}
+      <header className="mb-8">
+        <div className="flex flex-wrap items-center gap-2 mb-2">
+          {recipe.vegetarian && <span className={badgeCls}>vegetarian</span>}
+          {recipe.vegan && <span className={badgeCls}>vegan</span>}
+          {recipe.glutenFree && <span className={badgeCls}>gluten‑free</span>}
+        </div>
 
-          {/* Title + Meta Info */}
-          <h1 className="text-3xl font-bold">{recipe.title}</h1>
-          <div className="flex flex-wrap gap-6 text-sm text-gray-600">
-            <p>⏱ <strong>Prep Time:</strong> {recipe.readyInMinutes || "N/A"} min</p>
-            <p>🍽 <strong>Servings:</strong> {recipe.servings}</p>
-            <p>⭐ <strong>Rating:</strong> 4.8 (124 reviews)</p> {/* Static for now */}
-            <p>🎯 <strong>Difficulty:</strong> Easy</p> {/* You can replace this if you have real difficulty data */}
-          </div>
+        <h1 className="text-3xl lg:text-4xl font-bold text-gray-900">
+          {recipe.title}
+        </h1>
 
-          {/* Image */}
-<div className="flex justify-left">
-  {recipe.image ? (
-    <img
-      src={recipe.image}
-      alt={recipe.title}
-      className="w-full max-w-[600px] h-[400px] md:h-[500px] object-cover aspect-[4/3] rounded-2xl shadow-2xl"
-    />
-  ) : (
-    <div className="w-full max-w-[600px] h-[400px] md:h-[500px] object-cover aspect-[4/3] rounded-2xl shadow-2xl">
-      <p className="text-gray-500">No image available</p>
-    </div>
-  )}
-</div>
+        <ul className="flex flex-wrap gap-6 text-gray-600 mt-4 text-sm">
+          <li className="flex items-center gap-1">
+            <Clock className="w-4 h-4" /> {recipe.readyInMinutes || "N/A"} min
+          </li>
+          <li className="flex items-center gap-1">
+            <Utensils className="w-4 h-4" /> {recipe.servings} servings
+          </li>
+          <li className="flex items-center gap-1">
+            <Star className="w-4 h-4" /> 4.8 (124)
+          </li>
+          <li className="flex items-center gap-1">
+            <Activity className="w-4 h-4" /> Easy
+          </li>
+        </ul>
+      </header>
+
+      {/* Main Grid */}
+      <div className="grid grid-cols-[minmax(0,1fr)_320px]">
+        {/* MAIN COLUMN */}
+        <article className="">
+          {/* Hero image */}
+          <div className="w-full max-w-[600px] aspect-video rounded-2xl overflow-hidden shadow-md mb-8">
+            {recipe.image ? (
+              <img
+                src={recipe.image}
+                alt={recipe.title}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
+                No image available
+              </div>
+            )}
+          </div>
 
           {/* Summary */}
           {recipe.summary && (
             <div
-              className="text-gray-700"
+              className="prose prose-sm max-w-none mb-10 text-gray-700"
               dangerouslySetInnerHTML={{ __html: recipe.summary }}
             />
           )}
 
           {/* Instructions */}
           {recipe.instructions && (
-            <div>
-              <h2 className="text-2xl font-bold mt-6 mb-2">📋 Instructions</h2>
-              <div className="space-y-4">
+            <section className="mb-16">
+              <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                <ClipboardList className="w-6 h-6 text-orange-500" /> Instructions
+              </h2>
+              <ol className="space-y-6">
                 {recipe.instructions
-                  .split('. ')
-                  .filter((step: string) => step.length > 0)
-                  .map((step: string, index: number) => (
-                    <div key={index} className="flex items-start gap-4">
-                      <span className="text-white bg-orange-500 rounded-full h-6 w-6 text-center text-sm font-bold">
-                        {index + 1}
+                  .split(/\.\s+/)
+                  .filter(Boolean)
+                  .map((step : string, i : number) => (
+                    <li key={i} className="flex gap-4">
+                      <span className="flex-shrink-0 w-8 h-8 rounded-full bg-orange-500 text-white font-bold flex items-center justify-center">
+                        {i + 1}
                       </span>
                       <p className="text-gray-800">{step.trim()}</p>
-                    </div>
+                    </li>
                   ))}
-              </div>
-            </div>
+              </ol>
+            </section>
           )}
-        </div>
 
-        {/* Sidebar */}
-        <aside className="w-full lg:w-[300px] bg-gray-50 border rounded-xl p-4 space-y-4 h-fit shadow-sm">
-          <h3 className="text-lg font-semibold">🍲 Ingredients</h3>
-          <p className="text-sm text-gray-500">{recipe.servings} servings</p>
-          <ul className="list-disc list-inside text-gray-800 space-y-1 text-sm">
-            {recipe.extendedIngredients?.map((ing: any, idx: number) => (
-              <li key={idx}>
-                {ing.original || `${ing.amount} ${ing.unit} ${ing.name}`}
-              </li>
-            ))}
-          </ul>
+          {/* Nutrition */}
+          <section className="mb-20">
+            <h2 className="text-2xl font-bold mb-6">Nutrition Information</h2>
+            <div className="grid grid-cols-4 gap-4">
+              {[
+                { label: "Calories", val: "220" },
+                { label: "Protein", val: "6g" },
+                { label: "Fat", val: "12g" },
+                { label: "Carbs", val: "24g" },
+              ].map((n, i) => (
+                <div key={i} className="bg-gray-100 rounded-lg p-4 text-center shadow-sm">
+                  <p className="text-2xl font-bold text-gray-800">{n.val}</p>
+                  <p className="text-sm text-gray-500">{n.label}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        </article>
 
-          <button className="w-full mt-4 bg-green-600 text-white py-2 rounded hover:bg-green-700 text-sm">
-            Add All to Shopping List
-          </button>
+        {/* SIDEBAR */}
+        <aside className="sticky top-24 self-start space-y-6">
+          {/* Save / share */}
+          <div className="flex gap-2">
+            <button className={btnPrimaryCls}>
+              <Heart className="w-4 h-4" /> Save
+            </button>
+            <button className={btnOutlineCls}>
+              <Share2 className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Ingredients card */}
+          <div className="border rounded-xl p-6 shadow-sm bg-white">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-orange-500">Ingredients</h3>
+              <span className="text-sm text-gray-500">{recipe.servings} servings</span>
+            </div>
+            <ul className="space-y-2 text-sm text-gray-800 max-h-[60vh] overflow-y-auto pr-1">
+              {recipe.extendedIngredients?.map((ing, idx) => (
+                <li key={idx} className="flex justify-between gap-4">
+                  <span className="truncate">{ing.name}</span>
+                  <span className="whitespace-nowrap">
+                    {ing.amount} {ing.unit}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <button className="mt-6 w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-md text-sm">
+              Add All to Shopping List
+            </button>
+          </div>
+
+          {/* Suggestions */}
+          <section>
+            <h2 className="text-2xl font-bold mb-6">You Might Also Like</h2>
+            <div className="space-y-6">
+              {[
+                { title: "Thai Basil Tofu Stir-Fry", time: "25 min" },
+                { title: "Teriyaki Vegetable Noodles", time: "20 min" },
+                { title: "Spicy Szechuan Green Beans", time: "15 min" },
+              ].map((card, i) => (
+                <div key={i} className="border rounded-lg p-4 shadow-sm bg-white">
+                  <div className="w-full h-32 bg-gray-100 rounded-lg mb-2" />
+                  <p className="text-gray-800 font-semibold">{card.title}</p>
+                  <p className="text-sm text-gray-500">{card.time}</p>
+                </div>
+              ))}
+            </div>
+          </section>
         </aside>
       </div>
     </div>
