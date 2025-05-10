@@ -22,7 +22,7 @@ const mockRecipes = {
     {
       id: 1,
       title: "Vegan Pasta",
-      image: "pasta.jpg",
+      image: "https://spoonacular.com/recipeImages/vegan-pasta-1.jpg",
       readyInMinutes: 30,
       servings: 4,
       vegan: true,
@@ -33,7 +33,7 @@ const mockRecipes = {
     {
       id: 2,
       title: "Chicken Curry",
-      image: "curry.jpg",
+      image: "https://spoonacular.com/recipeImages/chicken-curry-2.jpg",
       readyInMinutes: 45,
       servings: 6,
       vegan: false,
@@ -44,7 +44,7 @@ const mockRecipes = {
     {
       id: 3,
       title: "Gluten-free Pizza",
-      image: "pizza.jpg",
+      image: "https://spoonacular.com/recipeImages/gluten-free-pizza-3.jpg",
       readyInMinutes: 60,
       servings: 2,
       vegan: false,
