@@ -76,7 +76,10 @@ the viewport is ultra‑wide.
         <li className="flex flex-col items-center text-center mt-4">
             <span className="text-xs text-gray-800 font-semibold">Rating</span>
             <span className="flex items-center gap-1">
-            <Star className="w-4 h-4 text-orange-500" /> 4.8 (124)
+            <Star className="w-4 h-4 text-orange-500" />
+            {recipe.spoonacularScore
+               ? `${(recipe.spoonacularScore / 20).toFixed(1)} (${recipe.aggregateLikes || 0})`
+               : "N/A"}
             </span>
         </li>
     </ul>
@@ -109,6 +112,8 @@ the viewport is ultra‑wide.
           dangerouslySetInnerHTML={{ __html: recipe.summary }}
         />
       )}
+    
+      <hr className="mb-10 border-t border-gray-600" />
 
       {/* Instructions */}
       {recipe.instructions && (
@@ -125,12 +130,14 @@ the viewport is ultra‑wide.
                   <span className="flex-shrink-0 w-8 h-8 rounded-full bg-orange-500 text-white font-bold flex items-center justify-center">
                     {i + 1}
                   </span>
-                  <p className="text-gray-800">{step.trim()}</p>
+                  <div className="text-gray-800">{step.trim()}</div>
                 </li>
               ))}
           </ol>
         </section>
       )}
+
+       <hr className="mb-10 border-t border-gray-600" />
 
       {/* Nutrition */}
       <section className="mb-20">
