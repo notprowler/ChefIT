@@ -46,20 +46,20 @@ function Recipe({ recipe }: RecipeProps) {
               </div>
             </div>
             <div className="flex flex-row gap-2">
-              <p>
+              <div>
                 {recipe.vegan ? (
                   <p className="border rounded-lg px-2">Vegan</p>
                 ) : (
                   ""
                 )}
-              </p>
-              <p>
+              </div>
+              <div>
                 {recipe.vegetarian ? (
                   <p className="border rounded-lg px-2">Vegetarian</p>
                 ) : (
                   ""
                 )}
-              </p>
+              </div>
             </div>
           </div>
         </div>
