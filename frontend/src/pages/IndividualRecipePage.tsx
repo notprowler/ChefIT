@@ -7,6 +7,8 @@ import {
   ChefHat,
   Heart,
   Share2,
+  Users2,
+  Printer,
   ClipboardList,
 } from "lucide-react";/**IndividualRecipePage – clamp main column width
 ------------------------------------------------
@@ -68,7 +70,7 @@ the viewport is ultra‑wide.
         <li className="flex flex-col items-center text-center mt-4">
             <span className="text-xs text-gray-800 font-semibold">Servings</span>
             <span className="flex items-center gap-1">
-                <Utensils className="w-4 h-4 text-orange-500" /> {recipe.servings}
+                <Users2 className="w-4 h-4 text-orange-500" /> {recipe.servings}
             </span>
         </li>
         <li className="flex flex-col items-center text-center mt-4">
@@ -151,7 +153,7 @@ the viewport is ultra‑wide.
 
     {/* SIDEBAR */}
     <aside className="space-y-6">
-      {/* Save / share */}
+      {/* Save / share / print */}
       <div className="flex gap-2">
         <button className={btnPrimaryCls}>
           <Heart className="w-4 h-4" /> Save
@@ -159,13 +161,24 @@ the viewport is ultra‑wide.
         <button className={btnOutlineCls}>
           <Share2 className="w-5 h-5" />
         </button>
+        <button
+            className={btnOutlineCls}
+            onClick={() => window.print()}
+            title="Print this page"
+        >
+           <Printer className="w-5 h-5" />
+        </button>
       </div>
 
       {/* Ingredients card */}
       <div className="border rounded-xl p-6 shadow-sm bg-white">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold text-orange-500">Ingredients</h3>
-          <span className="text-sm text-gray-500">{recipe.servings} servings</span>
+            <h3 className="text-lg font-bold text-black-800 flex items-center gap-2">
+                <Utensils className="w-5 h-5 text-orange-500" />
+                <span>Ingredients</span>
+            </h3>
+            <span className="text-sm bg-orange-500 text-white rounded-full px-3 py-1">
+                {recipe.servings} servings</span>
         </div>
         <ul className="space-y-2 text-sm text-gray-800 max-h-[60vh] overflow-y-auto pr-1">
           {recipe.extendedIngredients?.map((ing, idx) => (
