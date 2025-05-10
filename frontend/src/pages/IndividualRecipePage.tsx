@@ -1,4 +1,5 @@
 import { useLocation, Link } from "react-router-dom";
+import Navbar from "@/components/Navbar";
 import {
   Clock,
   Utensils,
@@ -12,7 +13,7 @@ import {
 /**
  * IndividualRecipePage – clamp main column width
  * ------------------------------------------------
- *  • Switched the grid to `lg:grid-cols-[minmax(0,820px)_320px]` – the first
+ *  • Switched the grid to `grid grid-cols-[minmax(0,1fr)_320px] gap-12` – the first
  *    track never grows wider than ~820 px, matching the longest recipe titles
  *    while staying fluid on smaller screens.
  *  • Added `mx-auto` to the `<article>` so it doesn’t hug the left gutter when
@@ -41,6 +42,9 @@ function IndividualRecipePage() {
   }
 
   return (
+    <div>
+        <Navbar />
+
     <div className="pt-20 px-4 lg:px-10 max-w-7xl mx-auto min-w-[52rem]">
       {/* ↖ Back link */}
       <Link
@@ -198,6 +202,7 @@ function IndividualRecipePage() {
           </section>
         </aside>
       </div>
+    </div>
     </div>
   );
 }
