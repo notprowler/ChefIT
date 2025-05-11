@@ -203,7 +203,7 @@ function IndividualRecipePage() {
                 </span>
               </div>
               <ul className="space-y-2 text-sm text-gray-800 max-h-[60vh] overflow-y-auto pr-1">
-                {recipe.extendedIngredients?.map((ing, idx) => (
+                {recipe.extendedIngredients?.map((ing, idx: number) => (
                   <li key={idx} className="flex justify-between gap-4">
                     <span className="truncate">{ing.name}</span>
                     <span className="whitespace-nowrap">
