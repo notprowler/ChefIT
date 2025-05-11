@@ -10,15 +10,14 @@ app = FastAPI(
     title="ChefIT API", description="API for ChefIT application", version="1.0.0"
 )
 
-# Configure CORS
+# Configure CORS with increased header size limits
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "*",
-    ],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    max_age=3600,
 )
 
 
