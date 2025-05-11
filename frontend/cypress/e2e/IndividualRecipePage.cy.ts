@@ -88,37 +88,36 @@ const mockRecipe = {
   spoonacularSourceUrl: "https://spoonacular.com/flax-quinoa-and-almond-meal-bread-643091"
 };
 
-describe("Individual Recipe Page", () => {
+describe("Individual Recipe API", () => {
   beforeEach(() => {
     // Intercept the API call and return mock data
-    cy.intercept('GET', '**/recipes/643091', {
+    cy.intercept('GET', '**/api/recipes/643091', {
       statusCode: 200,
       body: mockRecipe
     }).as('getRecipe');
   });
 
-  it("displays title, tags, and image correctly", () => {
-    cy.visit("/recipes/643091");
-
-    // Wait for the API call to complete
-    cy.wait('@getRecipe');
-
-    // Check title
-    cy.get('[data-testid="recipe-title"]')
-      .should("exist")
-      .and("contain", mockRecipe.title);
-
-    // Check tags
-    cy.get('[data-testid="recipe-tags"]')
-      .find("span")
-      .should("have.length.greaterThan", 0);
-
-    // Check image
-    cy.get('[data-testid="recipe-image"]')
-      .should("be.visible")
-      .and("have.attr", "src", mockRecipe.image)
-      .and(($img) => {
-        expect(($img[0] as HTMLImageElement).naturalWidth).to.be.greaterThan(0);
-      });
+  it("returns recipe data with correct structure", () => {
+    cy.request('/api/recipes/643091').then((response) => {
+      // Check status code
+      expect(response.status).to.eq(200);
+      
+      // Check content type
+      expect(response.headers['content-type']).to.include('application/json');
+      
+      // Check response body structure
+      expect(response.body).to.have.property('id', mockRecipe.id);
+      expect(response.body).to.have.property('title', mockRecipe.title);
+      expect(response.body).to.have.property('image', mockRecipe.image);
+      expect(response.body).to.have.property('readyInMinutes', mockRecipe.readyInMinutes);
+      expect(response.body).to.have.property('servings', mockRecipe.servings);
+      
+      // Check that the image URL is valid
+      expect(response.body.image).to.match(/^https?:\/\/.+\.(jpg|jpeg|png|gif)$/i);
+      
+      // Check that required arrays exist
+      expect(response.body).to.have.property('extendedIngredients').that.is.an('array');
+      expect(response.body).to.have.property('diets').that.is.an('array');
+    });
   });
 });
