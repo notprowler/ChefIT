@@ -23,7 +23,7 @@ const btnOutlineCls =
 
 function IndividualRecipePage() {
   const { state } = useLocation();
-  const recipe = state?.recipe;
+  const recipe = state?.recipe ?? (window as any).__TEST_RECIPE__;
 
   if (!recipe) {
     return (
