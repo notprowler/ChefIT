@@ -12,14 +12,6 @@ import {
   ClipboardList,
 } from "lucide-react";
 
-/**
- * IndividualRecipePage – fixed syntax errors in Nutrition section
- * ------------------------------------------------
- * - Corrected variable names (`item` and `ietm` to `n`).
- * - Fixed template literal syntax in className attributes.
- * - Corrected JSX structure by fixing closing tags.
- */
-
 const badgeCls =
   "inline-block rounded-full bg-green-100 text-green-800 px-2 py-0.5 text-xs font-medium";
 
@@ -32,7 +24,6 @@ const btnOutlineCls =
 function IndividualRecipePage() {
   const { state } = useLocation();
   const recipe = state?.recipe;
-;
 
   if (!recipe) {
     return (
@@ -57,13 +48,13 @@ function IndividualRecipePage() {
 
         {/* Title + meta */}
         <header className="mb-6">
-          <div className="flex flex-wrap items-center gap-2 mb-2">
+          <div data-testid="recipe-tags" className="flex flex-wrap items-center gap-2 mb-2">
             {recipe.vegetarian && <span className={badgeCls}>vegetarian</span>}
             {recipe.vegan && <span className={badgeCls}>vegan</span>}
             {recipe.glutenFree && <span className={badgeCls}>gluten‑free</span>}
           </div>
 
-          <h1 className="text-3xl lg:text-4xl font-bold text-gray-900">
+          <h1 data-testid="recipe-title" className="text-3xl lg:text-4xl font-bold text-gray-900">
             {recipe.title}
           </h1>
 
@@ -106,6 +97,7 @@ function IndividualRecipePage() {
             <div className="w-full max-w-[600px] aspect-video rounded-2xl overflow-hidden shadow-md mb-8">
               {recipe.image ? (
                 <img
+                  data-testid="recipe-image"
                   src={recipe.image}
                   alt={recipe.title}
                   className="w-full h-full object-cover"
@@ -151,7 +143,6 @@ function IndividualRecipePage() {
 
             <hr className="mb-10 border-t border-gray-600" />
 
-            {/*Grid layout collapses if 5 columns are used*/}
             {/* Nutrition */}
             <section className="mb-20">
               <h2 className="text-2xl font-bold mb-6">Nutrition Information</h2>
@@ -203,7 +194,7 @@ function IndividualRecipePage() {
                 </span>
               </div>
               <ul className="space-y-2 text-sm text-gray-800 max-h-[60vh] overflow-y-auto pr-1">
-                {recipe.extendedIngredients?.map((ing, idx: number) => (
+                {recipe.extendedIngredients?.map((ing : any, idx: number) => (
                   <li key={idx} className="flex justify-between gap-4">
                     <span className="truncate">{ing.name}</span>
                     <span className="whitespace-nowrap">
