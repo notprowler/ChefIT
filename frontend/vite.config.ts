@@ -21,12 +21,7 @@ export default defineConfig({
         target: 'http://localhost:8000',
         changeOrigin: true,
         secure: false,
-        configure: (proxy, _options) => {
-          proxy.on('proxyReq', (proxyReq, req, _res) => {
-            // Increase the header size limit for proxy requests
-            proxyReq.setHeader('Connection', 'keep-alive');
-          });
-        },
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },
