@@ -146,7 +146,7 @@ function RecipesPage() {
       <Navbar />
 
       {/* Filter Button and Dropdown */}
-      <div className="relative px-12 mb-4 mt-8">
+      <div className="relative z-20 px-12 mb-4 mt-8 ">
         <div className="flex items-center gap-4">
           <button
             onClick={() => setIsFilterOpen(!isFilterOpen)}
@@ -179,9 +179,9 @@ function RecipesPage() {
             </svg>
             {isFilterOpen ? "Hide Filters" : "Show Filters"}
           </button>
-
+          <div className="relative z-20">
           <IngredientSearchDropdown onSearch={searchRecipes} />
-
+          </div>
           {(filters.vegan ||
             filters.vegetarian ||
             filters.glutenFree ||

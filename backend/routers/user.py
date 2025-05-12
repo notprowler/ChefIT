@@ -1,7 +1,9 @@
 from os import getenv
-from fastapi import APIRouter, Request, HTTPException, status
+from fastapi import APIRouter, Request, HTTPException, status, Body
 from supabase import create_client, AsyncClient
-from typing import Any, List
+from requests import RequestException, get
+from typing import Any, List, Dict
+import httpx
 
 URL = getenv("SUPABASE_URL")
 KEY = getenv("SUPABASE_ANON_KEY")
@@ -24,20 +26,26 @@ async def get_user_favorite(request: Request) -> Any:
             detail="ID header missing"
         )
 
-    # 2) directly query Postgres for that ID’s favorites
-    fav_resp = sb.from_("user") \
-                       .select("favorite") \
-                       .eq("UID", user_id) \
-                       .single() \
-                       .execute()
+    # 2) query Postgres for that user's stored recipe objects
+    resp = sb.from_("user") \
+             .select("favorite") \
+             .eq("UID", user_id) \
+             .single() \
+             .execute()
 
-    favorites: List[Any] = fav_resp.data.get("favorite", [])
+    # 3) pull the JSON array of recipes
+    recipes: List[Any] = resp.data.get("favorite") or []
 
-    return {"user_id": user_id, "favorites": favorites}
+    # 4) return to client
+    return {
+        "user_id": user_id,
+        "recipes": recipes
+    }
+
 
 
 @router.post("/user/favorite")
-async def set_user_favorite(request: Request, recipe_id: int):
+async def set_user_favorite(request: Request, recipe: Dict[str, Any] = Body(...)):
     try:
         user_id = request.headers.get("ID")
         if not user_id:
@@ -50,9 +58,19 @@ async def set_user_favorite(request: Request, recipe_id: int):
                 .single() \
                 .execute()
         
-        current: List[int] = resp.data.get("favorite") or []
+        raw = resp.data.get("favorite")
+        # 2) coerce to a list
+        if raw is None:
+            current: List[Any] = []
+        elif isinstance(raw, list):
+            current = raw
+        else:
+            # if it's a dict (or anything else), wrap it into a one-element list
+            current = [raw]
 
-        updated = current + [recipe_id]
+        # 3) append the new recipe object
+        updated = current + [recipe]
+
 
         upd = sb.from_("user") \
                 .update({"favorite": updated}) \
