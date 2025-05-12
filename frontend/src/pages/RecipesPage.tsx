@@ -41,10 +41,13 @@ function RecipesPage() {
     if (!url || url.trim() === "" || !url.startsWith("http")) return false;
 
     // Check if URL ends with a proper image extension
-    const validExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
-    const hasValidExtension = validExtensions.some((ext) =>
-      url.toLowerCase().endsWith(ext)
-    );
+    const validExtensions = new Set([".jpg", ".jpeg", ".png", ".gif", ".webp"]);
+    const urlLower = url.toLowerCase();
+    const lastDotIndex = urlLower.lastIndexOf(".");
+    if (lastDotIndex === -1) return false;
+
+    const extension = urlLower.slice(lastDotIndex);
+    const hasValidExtension = validExtensions.has(extension);
 
     // Check if URL is complete (not truncated)
     const isCompleteUrl = !url.endsWith(".") && url.includes(".");
