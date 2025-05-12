@@ -4,6 +4,8 @@ from supabase import create_client, AsyncClient
 from requests import RequestException, get
 from typing import Any, List, Dict
 import httpx
+from dotenv import load_dotenv
+load_dotenv()
 
 URL = getenv("VITE_SUPABASE_URL")
 KEY = getenv("VITE_SUPABASE_ANON_KEY")
