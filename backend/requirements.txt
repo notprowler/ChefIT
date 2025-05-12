@@ -3,3 +3,5 @@ uvicorn
 requests
 python-dotenv
 httpx
+google-generativeai
+Pillow
