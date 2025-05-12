@@ -93,10 +93,16 @@ function Recipe({ recipe }: RecipeProps) {
         <div className="space-y-4">
           <h3 className="text-xl font-bold line-clamp-2">{recipe.title}</h3>
 
-          <div className="flex flex-row justify-between items-center">
-            <div className="flex flex-row items-center gap-2">
-              <IoTime className="w-6 h-6" />
-              <p>{recipe.readyInMinutes} mins</p>
+          <div className="space-y-2 flex flex-col justify-between">
+            <div className="flex flex-row justify-start gap-2">
+              <div className="flex flex-row items-center">
+                <IoTime className="w-6" />
+                <p>{recipe.readyInMinutes} mins</p>
+              </div>
+              <div className="flex flex-row items-center">
+                <FaUtensils className="w-6" />
+                <p>Servings: {recipe.servings}</p>
+              </div>
             </div>
             <div className="flex flex-row gap-2">
               <div>
@@ -114,15 +120,6 @@ function Recipe({ recipe }: RecipeProps) {
                 )}
               </div>
             </div>
-          </div>
-
-          <div className="flex flex-row gap-2">
-            {recipe.vegan && (
-              <span className="border rounded-lg px-2">Vegan</span>
-            )}
-            {recipe.vegetarian && (
-              <span className="border rounded-lg px-2">Vegetarian</span>
-            )}
           </div>
         </div>
         <div>
