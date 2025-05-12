@@ -1,9 +1,14 @@
+from dotenv import load_dotenv
+load_dotenv(dotenv_path=".env")
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import recipes, gemini
 from dotenv import load_dotenv
 
 load_dotenv(dotenv_path=".env")
+
+from routers import recipes
+from routers import user
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -36,6 +41,7 @@ async def health_check():
 # Get Single Recipe
 app.include_router(recipes.router)
 app.include_router(gemini.router, prefix="/gemini", tags=["gemini"])
+app.include_router(user.router)
 
 if __name__ == "__main__":
     import uvicorn

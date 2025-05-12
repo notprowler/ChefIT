@@ -6,6 +6,7 @@ import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
 import IndividualRecipePage from './pages/IndividualRecipePage';
 import GeminiPage from './pages/GeminiPage';
+import FavoritesPage from "./pages/favoritePage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Route path='/login' element={<LoginPage />} />
       <Route path='/recipes/:id' element={<IndividualRecipePage />} />
       <Route path='/gemini' element={<GeminiPage />} />
+      <Route path='/favorite' element={<FavoritesPage />} />
     </Routes>
   );
 }
