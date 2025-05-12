@@ -1,42 +1,65 @@
-import os
-from supabase import create_client, Client
-from fastapi import APIRouter, Request, HTTPException
-url: str = os.environ.get("SUPABASE_URL")
-key: str = os.environ.get("SUPABASE_KEY")
+from os import getenv
+from fastapi import APIRouter, Request, HTTPException, status
+from supabase import create_client, AsyncClient
+from typing import Any, List
 
-if not url or not key:
+URL = getenv("SUPABASE_URL")
+KEY = getenv("SUPABASE_ANON_KEY")
+
+if not URL or not KEY:
     raise ValueError("Supabase URL or Anon Key is missing in Env Variables")
-    
-supabase: Client = create_client(url, key)
+
+# We only need one AsyncClient since we’re not using supabase.auth here
+sb = create_client(URL, KEY)
 
 router = APIRouter()
 
-def get_supabase_client_with_Auth(token: str) -> Client:
-    sb: Client = create_client(url,key)
-    sb.auth.set_auth(token)
-    return sb
-
 @router.get("/user/favorite")
-async def get_user_favorite(request: Request):
+async def get_user_favorite(request: Request) -> Any:
+    # 1) grab the raw user ID from a custom header
+    user_id = request.headers.get("ID")
+    if not user_id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="ID header missing"
+        )
+
+    # 2) directly query Postgres for that ID’s favorites
+    fav_resp = sb.from_("user") \
+                       .select("favorite") \
+                       .eq("UID", user_id) \
+                       .single() \
+                       .execute()
+
+    favorites: List[Any] = fav_resp.data.get("favorite", [])
+
+    return {"user_id": user_id, "favorites": favorites}
+
+
+@router.post("/user/favorite")
+async def set_user_favorite(request: Request, recipe_id: int):
     try:
-        auth_header = request.headers.get("Authorization")
-        if not auth_header or not auth_header.lower().startswith("bearer "):
-            raise HTTPException(status_code=401, detail="Authorization header missing or invalid")
+        user_id = request.headers.get("ID")
+        if not user_id:
+            raise HTTPException(status_code=401, detail="ID header missing")
 
-        token = auth_header.split(" ", 1)[1].strip()
-        supabase = get_supabase_client_with_Auth(token)
+        # fetch current favorites
+        resp = sb.from_("user") \
+                .select("favorite") \
+                .eq("UID", user_id) \
+                .single() \
+                .execute()
+        
+        current: List[int] = resp.data.get("favorite") or []
 
-        user_resp = supabase.auth.get_user()
-        user = user_resp.get("user")
-        if not user:
-            raise HTTPException(status_code=401, detail="Invalid or expired JWT")
+        updated = current + [recipe_id]
 
-        uid = user.get("id")
-        response = supabase.table("favorites").select("*").eq("user_id", uid).execute()
-        if response.get("error"):
-            raise HTTPException(status_code=400, detail=response["error"]["message"])
+        upd = sb.from_("user") \
+                .update({"favorite": updated}) \
+                .eq("UID", user_id) \
+                .execute()
 
-        return {"user": user, "favorites": response.get("data")}
+        return {"user_id": user_id, "favorites": updated}
 
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

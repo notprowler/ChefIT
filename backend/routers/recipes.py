@@ -5,7 +5,6 @@ from os import getenv
 
 router = APIRouter()
 
-
 @router.get("/recipes/{recipe_id}")
 async def get_single_recipe(recipe_id: int):
     try:
