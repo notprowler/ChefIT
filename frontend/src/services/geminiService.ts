@@ -53,7 +53,7 @@ export async function analyzeImage(file: File): Promise<GeminiResponse> {
   const formData = new FormData();
   formData.append('file', file);
 
-  const response = await fetch('/api/gemini/analyze-image', {
+  const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/gemini/analyze-image`, {
     method: 'POST',
     body: formData,
     headers: {
