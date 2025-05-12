@@ -1,14 +1,10 @@
-from dotenv import load_dotenv
-load_dotenv(dotenv_path=".env")
-from fastapi import FastAPI
+from routers import recipes, gemini, user
 from fastapi.middleware.cors import CORSMiddleware
-from routers import recipes, gemini
+from fastapi import FastAPI
 from dotenv import load_dotenv
 
 load_dotenv(dotenv_path=".env")
 
-from routers import recipes
-from routers import user
 
 # Initialize FastAPI app
 app = FastAPI(
