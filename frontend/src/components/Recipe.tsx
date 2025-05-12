@@ -2,6 +2,7 @@ import { FaUtensils } from "react-icons/fa";
 import { IoTime } from "react-icons/io5";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 interface RecipeProps {
   recipe: {
@@ -97,9 +98,21 @@ function Recipe({ recipe }: RecipeProps) {
               <IoTime className="w-6 h-6" />
               <p>{recipe.readyInMinutes} mins</p>
             </div>
-            <div className="flex flex-row items-center gap-2">
-              <FaUtensils className="w-6 h-6" />
-              <p>Servings: {recipe.servings}</p>
+            <div className="flex flex-row gap-2">
+              <div>
+                {recipe.vegan ? (
+                  <p className="border rounded-lg px-2">Vegan</p>
+                ) : (
+                  ""
+                )}
+              </div>
+              <div>
+                {recipe.vegetarian ? (
+                  <p className="border rounded-lg px-2">Vegetarian</p>
+                ) : (
+                  ""
+                )}
+              </div>
             </div>
           </div>
 
@@ -112,10 +125,13 @@ function Recipe({ recipe }: RecipeProps) {
             )}
           </div>
         </div>
-
-        <button className="bg-orange-400 w-full p-2 rounded-lg hover:cursor-pointer text-white hover:bg-black">
-          View Recipe
-        </button>
+        <div>
+          <Link to={`/recipes/${recipe.id}`} state={{ recipe }}>
+             <button className="bg-orange-400 w-full p-2 rounded-lg hover:cursor-pointer text-white hover:bg-black">
+              View Recipe
+          </button>
+          </Link>
+        </div>
       </div>
     </div>
   );

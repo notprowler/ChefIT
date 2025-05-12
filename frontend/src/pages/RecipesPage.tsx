@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Recipe from "../components/Recipe";
 import Navbar from "@/components/Navbar";
+import IngredientSearchDropdown from "@/components/IngredientSearchDropdown";
 
 interface RecipeType {
   id: number;
@@ -36,6 +37,48 @@ function RecipesPage() {
     servings: "",
   });
 
+  const isValidImageUrl = (url: string | null | undefined): boolean => {
+    if (!url || url.trim() === "" || !url.startsWith("http")) return false;
+
+    // Check if URL ends with a proper image extension
+    const validExtensions = new Set([".jpg", ".jpeg", ".png", ".gif", ".webp"]);
+    const urlLower = url.toLowerCase();
+    const lastDotIndex = urlLower.lastIndexOf(".");
+    if (lastDotIndex === -1) return false;
+
+    const extension = urlLower.slice(lastDotIndex);
+    const hasValidExtension = validExtensions.has(extension);
+
+    // Check if URL is complete (not truncated)
+    const isCompleteUrl = !url.endsWith(".") && url.includes(".");
+
+    return hasValidExtension && isCompleteUrl;
+  };
+
+  const searchRecipes = async (ingredients: string[]) => {
+    if (!ingredients.length) return;
+    setLoading(true);
+    try {
+      const query = ingredients.join(",");
+      const response = await fetch(
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/recipes/search-by-ingredients?ingredients=${query}`
+      );
+      const data: RecipeType[] = await response.json();
+      // Filter out recipes with invalid images
+      const validRecipes = Array.isArray(data)
+        ? data.filter((recipe) => isValidImageUrl(recipe.image))
+        : [];
+      setRecipes(validRecipes);
+    } catch (error) {
+      console.error("Error fetching recipes:", error);
+      setRecipes([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
@@ -43,7 +86,12 @@ function RecipesPage() {
           `${import.meta.env.VITE_BACKEND_URL}/recipes`
         );
         const data = await response.json();
-        setRecipes(data.recipes);
+        // Filter out recipes with invalid images
+        const validRecipes = data.recipes.filter((recipe: RecipeType) =>
+          isValidImageUrl(recipe.image)
+        );
+        setRecipes(validRecipes);
+        console.log(validRecipes);
       } catch (error) {
         console.error("Error fetching recipes:", error);
       } finally {
@@ -131,6 +179,9 @@ function RecipesPage() {
             </svg>
             {isFilterOpen ? "Hide Filters" : "Show Filters"}
           </button>
+
+          <IngredientSearchDropdown onSearch={searchRecipes} />
+
           {(filters.vegan ||
             filters.vegetarian ||
             filters.glutenFree ||
