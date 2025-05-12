@@ -5,8 +5,8 @@ from requests import RequestException, get
 from typing import Any, List, Dict
 import httpx
 
-URL = getenv("SUPABASE_URL")
-KEY = getenv("SUPABASE_ANON_KEY")
+URL = getenv("VITE_SUPABASE_URL")
+KEY = getenv("VITE_SUPABASE_ANON_KEY")
 
 if not URL or not KEY:
     raise ValueError("Supabase URL or Anon Key is missing in Env Variables")
