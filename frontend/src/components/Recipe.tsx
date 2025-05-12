@@ -14,45 +14,45 @@ interface RecipeProps {
     vegan: boolean;
     vegetarian: boolean;
   };
+  initialFavorited?: boolean;    // ← new
 }
 
-function Recipe({ recipe }: RecipeProps) {
-  const [favorited, setFavorited] = useState(false);
-
+function Recipe({ recipe, initialFavorited = false }: RecipeProps) {
+  const [favorited, setFavorited] = useState(initialFavorited);
   const toggleFavorite = async () => {
     setFavorited((prev) => !prev);
-    console.log(recipe.id)
+
+    // 1) ensure user is signed in
+    const raw = localStorage.getItem("sb-wnxtjmenkanydqmuvmjj-auth-token");
+    if (!raw) {
+      alert("Please sign in to use this feature.");
+      setFavorited((prev) => !prev);
+      return;
+    }
+    const { user } = JSON.parse(raw);
+    const userId: string = user.id;
+
+    // 2) send the full recipe object to backend
     try {
-      // 1) pull supabase auth payload from localStorage
-      const raw = localStorage.getItem("sb-wnxtjmenkanydqmuvmjj-auth-token");
-      if (!raw){
-          alert("Please sign in to use this feature.");
-          setFavorited((prev) => !prev)
-          return;
-      };
-      const { user } = JSON.parse(raw);
-      const userId: string = user.id;
-      console.log(userId)
-       // 2) send to your FastAPI endpoint
       const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/user/favorite?recipe_id=${recipe.id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/user/favorite`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             ID: userId,
-          }
+          },
+          body: JSON.stringify(recipe),
         }
       );
-       if (!res.ok) {
-        // undo optimistic update on error
+
+      if (!res.ok) {
+        // revert if error
         setFavorited((prev) => !prev);
         const err = await res.text();
         console.error("Favorite API error:", err);
       }
-    }
-      catch (e) {
-      // undo optimistic update on error
+    } catch (e) {
       setFavorited((prev) => !prev);
       console.error("Failed to toggle favorite:", e);
     }
@@ -105,28 +105,20 @@ function Recipe({ recipe }: RecipeProps) {
               </div>
             </div>
             <div className="flex flex-row gap-2">
-              <div>
-                {recipe.vegan ? (
-                  <p className="border rounded-lg px-2">Vegan</p>
-                ) : (
-                  ""
-                )}
-              </div>
-              <div>
-                {recipe.vegetarian ? (
-                  <p className="border rounded-lg px-2">Vegetarian</p>
-                ) : (
-                  ""
-                )}
-              </div>
+              {recipe.vegan && (
+                <p className="border rounded-lg px-2">Vegan</p>
+              )}
+              {recipe.vegetarian && (
+                <p className="border rounded-lg px-2">Vegetarian</p>
+              )}
             </div>
           </div>
         </div>
         <div>
           <Link to={`/recipes/${recipe.id}`} state={{ recipe }}>
-             <button className="bg-orange-400 w-full p-2 rounded-lg hover:cursor-pointer text-white hover:bg-black">
+            <button className="bg-orange-400 w-full p-2 rounded-lg hover:cursor-pointer text-white hover:bg-black">
               View Recipe
-          </button>
+            </button>
           </Link>
         </div>
       </div>

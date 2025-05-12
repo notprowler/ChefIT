@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Recipe from "../components/Recipe";
 import Navbar from "@/components/Navbar";
 import IngredientSearchDropdown from "@/components/IngredientSearchDropdown";
+import { useNavigate } from "react-router-dom";
 
 interface RecipeType {
   id: number;
@@ -25,6 +26,8 @@ interface Filters {
 }
 
 function RecipesPage() {
+  const navigate = useNavigate();
+
   const [recipes, setRecipes] = useState<RecipeType[]>([]);
   const [loading, setLoading] = useState(true);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -182,6 +185,17 @@ function RecipesPage() {
           <div className="relative z-20">
           <IngredientSearchDropdown onSearch={searchRecipes} />
           </div>
+          <button
+            onClick={() => navigate("/favorite")}
+            className={`
+              flex items-center gap-2 px-4 py-2 rounded-lg
+              font-medium transition-all duration-200
+              shadow-sm hover:shadow-md hover:cursor-pointer
+              bg-orange-400 text-white hover:bg-black
+            `}
+          >
+            Favorites
+          </button>
           {(filters.vegan ||
             filters.vegetarian ||
             filters.glutenFree ||

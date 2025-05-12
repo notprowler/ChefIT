@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Recipe from "../components/Recipe";
 import Navbar from "@/components/Navbar";
+import { useNavigate } from "react-router-dom";
 
 interface RecipeType {
   id: number;
@@ -24,6 +25,7 @@ interface Filters {
 }
 
 export default function FavoritesPage() {
+  const navigate = useNavigate();
   const [recipes, setRecipes] = useState<RecipeType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -165,7 +167,17 @@ export default function FavoritesPage() {
               >
                 {isFilterOpen ? "Hide Filters" : "Show Filters"}
               </button>
-
+                <button
+                onClick={() => navigate("/recipes")}
+                className={`
+                    flex items-center gap-2 px-4 py-2 rounded-lg
+                    font-medium transition-all duration-200
+                    shadow-sm hover:shadow-md hover:cursor-pointer
+                    bg-orange-400 text-white hover:bg-black
+                `}
+                >
+                Back to Recipes
+                </button>
               {(filters.vegan ||
                 filters.vegetarian ||
                 filters.glutenFree ||
@@ -273,7 +285,7 @@ export default function FavoritesPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 p-12">
             {filteredRecipes.map((r) => (
-              <Recipe key={r.id} recipe={r} />
+              <Recipe key={r.id} recipe={r} initialFavorited={true} />
             ))}
           </div>
         </>
