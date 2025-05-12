@@ -84,7 +84,7 @@ export default function GeminiPage() {
             <Button
               onClick={handleUpload}
               disabled={!selectedFile || isLoading}
-              className='w-full'
+              className='w-full bg-orange-500 hover:bg-orange-600'
             >
               {isLoading ? (
                 <>
