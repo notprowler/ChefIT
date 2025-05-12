@@ -112,6 +112,7 @@ function SignupPage() {
         <div className="flex space-x-4">
           <button
             type="button"
+            disabled
             className="flex w-1/2 items-center justify-center space-x-2
                        rounded border border-gray-300 py-2 text-sm
                        bg-gray-200 cursor-not-allowed"
@@ -120,6 +121,7 @@ function SignupPage() {
           </button>
           <button
             type="button"
+            disabled
             className="flex w-1/2 items-center justify-center space-x-2
                        rounded border border-gray-300 py-2 text-sm
                        bg-gray-200 cursor-not-allowed"

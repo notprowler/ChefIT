@@ -138,7 +138,10 @@ export default function GeminiPage() {
                         className="border rounded-lg p-4 hover:shadow-md transition-shadow"
                       >
                         <div className="flex gap-4">
-                          <Link to={`/recipes/${recipe.id}`}>
+                          <Link
+                            to={`/recipes/${recipe.id}`}
+                            state={{ recipe: recipe }}
+                          >
                             <img
                               src={recipe.image}
                               alt={recipe.title}
