@@ -1,5 +1,6 @@
 import { FaUtensils } from "react-icons/fa";
 import { IoTime } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 interface RecipeProps {
   recipe: {
@@ -64,9 +65,11 @@ function Recipe({ recipe }: RecipeProps) {
           </div>
         </div>
         <div>
-          <button className="bg-orange-400 w-full p-2 rounded-lg hover:cursor-pointer text-white hover:bg-black">
-            View Recipe
+          <Link to={`/recipes/${recipe.id}`} state={{ recipe }}>
+             <button className="bg-orange-400 w-full p-2 rounded-lg hover:cursor-pointer text-white hover:bg-black">
+              View Recipe
           </button>
+          </Link>
         </div>
       </div>
     </div>
