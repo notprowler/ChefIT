@@ -15,7 +15,7 @@ router = APIRouter()
 
 # Configure Gemini API
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-2.0-flash-lite')
 
 
 async def get_ingredients_from_image(image_bytes: bytes) -> List[str]:
@@ -50,7 +50,7 @@ async def get_recipes_from_ingredients(ingredients: List[str]) -> List[dict]:
             params={
                 "apiKey": os.getenv("SPOONACULAR_API_KEY"),
                 "ingredients": ingredients_str,
-                "number": 5,
+                "number": 10,
                 "ignorePantry": True
             }
         )
