@@ -12,27 +12,22 @@ interface RecipeType {
 }
 
 const HeroSection = () => {
-  const [randomRecipeImage, setRandomRecipeImage] = useState<string>("");
+  const [recipe, setRecipe] = useState<RecipeType | null>(null);
 
   useEffect(() => {
-    const fetchRandomRecipe = async () => {
+    const fetchSpecificRecipe = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/recipes`
+          `${import.meta.env.VITE_BACKEND_URL}/recipes/991625`
         );
         const data = await response.json();
-        const recipes: RecipeType[] = data.recipes;
-        if (recipes.length > 0) {
-          const randomIndex = Math.floor(Math.random() * recipes.length);
-          const selectedRecipe = recipes[randomIndex];
-          setRandomRecipeImage(selectedRecipe.image);
-        }
+        setRecipe(data);
       } catch (error) {
-        console.error("Error fetching random recipe:", error);
+        console.error("Error fetching recipe:", error);
       }
     };
 
-    fetchRandomRecipe();
+    fetchSpecificRecipe();
   }, []);
 
   return (
@@ -48,12 +43,14 @@ const HeroSection = () => {
           </span>
 
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
-            Cook Amazing Meals<br />
+            Cook Amazing Meals
+            <br />
             with What You <span className="text-orange-500">Already Have</span>
           </h1>
 
           <p className="text-gray-700 text-lg max-w-md">
-            Enter your ingredients and discover personalized recipes tailored to what’s in your kitchen right now.
+            Enter your ingredients and discover personalized recipes tailored to
+            what's in your kitchen right now.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
@@ -74,12 +71,14 @@ const HeroSection = () => {
 
         {/* Right Side: Dynamic Image */}
         <div className="flex justify-center">
-          {randomRecipeImage ? (
-            <img
-              src={randomRecipeImage}
-              alt="Random Recipe"
-              className="w-full max-w-[600px] h-[400px] md:h-[500px] lg:h-[500px] object-cover aspect-[4/3] rounded-2xl shadow-2xl"
-            />
+          {recipe ? (
+            <Link to={`/recipes/${recipe.id}`} state={{ recipe }}>
+              <img
+                src={recipe.image}
+                alt={recipe.title}
+                className="w-full max-w-[600px] h-[400px] md:h-[500px] lg:h-[500px] object-cover aspect-[4/3] rounded-2xl shadow-2xl"
+              />
+            </Link>
           ) : (
             <div className="w-full max-w-[600px] h-[400px] md:h-[500px] lg:h-[500px] bg-gray-200 flex items-center justify-center rounded-2xl shadow-2xl">
               <p className="text-gray-500">Loading...</p>
