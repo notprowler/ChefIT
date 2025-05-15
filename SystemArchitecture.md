@@ -11,3 +11,14 @@ The backend acts as the central coordinator, handling business logic and delegat
 **Gemini API** for generating AI-powered recipe suggestions.  
 **Spoonacular API** for retrieving third-party recipe and nutrition data.  
 All external communication is routed through the backend, ensuring a secure, modular, and maintainable architecture.
+
+## Entity Diagram – Favorite a Recipe Feature
+
+![Entity Diagram](./ER%20Diagram.png)
+
+This entity diagram models the data relationships behind the "Favorite a Recipe" feature in ChefIt.  
+A **User** is uniquely identified by a **UID** and has both an **email**  field and a **favorite** field, which stores an array of recipe objects in JSON format.  
+These recipes are not stored in a separate **Recipe** table — instead, they are embedded directly within the **User.favorite** field using PostgreSQL’s JSONB support via Supabase.  
+Each embedded recipe object contains fields such as **id**, **title**, **image**, **source_url**, and **spoonacular_id**.  
+The relationship between **User** and the **Recipe JSON Object** is represented as one-to-many, indicating that a single user can have zero or more favorited recipes.  
+While the diagram is structured in a relational format for clarity, it reflects a denormalized implementation in practice.
