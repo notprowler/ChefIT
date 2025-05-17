@@ -1,0 +1,148 @@
+name: All Combined Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # Backend tests with pytest (FastAPI)
+  test-backend:
+    runs-on: ubuntu-latest
+
+    env:
+      SPOONACULAR_API_KEY: ${{ secrets.SPOONACULAR_API_KEY }}
+      VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Debug Environment
+        run: |
+          cd backend
+          source venv/bin/activate
+          echo "API Key presence check:"
+          echo "$SPOONACULAR_API_KEY"
+          echo "Python environment:"
+          which python
+          python --version
+
+      - name: Run pytest tests
+        run: |
+          cd backend
+          source venv/bin/activate
+          export SPOONACULAR_API_KEY=${{ secrets.SPOONACULAR_API_KEY }}
+          python -m pytest -v
+
+  # Frontend tests with Vitest
+  test-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Clean install dependencies
+        run: |
+          cd frontend
+          rm -rf node_modules package-lock.json
+          npm install
+          npm install @rollup/rollup-linux-x64-gnu
+
+      - name: Create .env file
+        run: |
+          cd frontend
+          echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" >> .env
+          echo "VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}" >> .env
+
+      - name: Run Vitest tests
+        run: |
+          cd frontend
+          npm run test -- --run
+
+  # E2E Tests
+  e2e:
+    runs-on: ubuntu-latest
+    env:
+      SPOONACULAR_API_KEY: ${{ secrets.SPOONACULAR_API_KEY }}
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Clean install dependencies
+        run: |
+          cd frontend
+          rm -rf node_modules package-lock.json
+          npm install
+          npm install @rollup/rollup-linux-x64-gnu
+
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Create .env file for frontend
+        run: |
+          cd frontend
+          echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" >> .env
+          echo "VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}" >> .env
+
+      - name: Build the project
+        run: cd frontend && npm run build
+
+      - name: Start preview server
+        run: cd frontend && npm run preview &
+
+      - name: Start backend server
+        run: |
+          cd backend
+          source venv/bin/activate
+          python3 -m fastapi dev main.py &
+
+      - name: Wait for server to be ready
+        run: npx wait-on http://localhost:4173
+
+      - name: Run Cypress tests
+        run: cd frontend && npm run cy:run
+        continue-on-error: true
+
+      - name: Upload Cypress screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: frontend/cypress/screenshots
