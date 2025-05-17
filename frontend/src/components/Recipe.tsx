@@ -14,7 +14,7 @@ interface RecipeProps {
     vegan: boolean;
     vegetarian: boolean;
   };
-  initialFavorited?: boolean;    // ← new
+  initialFavorited?: boolean; // ← new
 }
 
 function Recipe({ recipe, initialFavorited = false }: RecipeProps) {
@@ -59,7 +59,10 @@ function Recipe({ recipe, initialFavorited = false }: RecipeProps) {
   };
 
   return (
-    <div className="relative border rounded-lg shadow-md flex flex-col h-[500px]">
+    <div
+      data-cy="recipe-card"
+      className="relative border rounded-lg shadow-md flex flex-col h-[500px]"
+    >
       {/* Favorite button */}
       <button
         onClick={toggleFavorite}
