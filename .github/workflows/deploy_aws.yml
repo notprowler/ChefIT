@@ -23,7 +23,6 @@ jobs:
 
       - name: Zip application
         run: |
-          cd app
           zip -r fastapi_deploy_${{ github.sha }}.zip backend -x "*/__pycache__/*" "*.pyc"
 
       - name: Configure AWS credentials
