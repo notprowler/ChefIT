@@ -1,18 +1,9 @@
 name: deploy-fastapi
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'backend/**'
-      - '.github/workflows/deploy_aws.yml'
-
   pull_request:
-    branches: [main]
-    types: [closed]
-    paths:
-      - 'backend/**'
-      - '.github/workflows/deploy_aws.yml'
+    branches:
+      - main
 
 jobs:
   deploy:
