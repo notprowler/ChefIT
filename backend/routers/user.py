@@ -35,6 +35,12 @@ async def get_user_favorite(request: Request) -> Any:
              .single() \
              .execute()
 
+    if not resp or not resp.data:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Supabase query failed"
+        )
+
     # 3) pull the JSON array of recipes
     recipes: List[Any] = resp.data.get("favorite") or []
 
@@ -59,8 +65,9 @@ async def set_user_favorite(request: Request, recipe: Dict[str, Any] = Body(...)
                 .eq("UID", user_id) \
                 .single() \
                 .execute()
-        
-        raw = resp.data.get("favorite")
+
+        raw = resp.data.get("favorite") if resp and resp.data else None
+
         # 2) coerce to a list
         if raw is None:
             current: List[Any] = []
@@ -70,9 +77,11 @@ async def set_user_favorite(request: Request, recipe: Dict[str, Any] = Body(...)
             # if it's a dict (or anything else), wrap it into a one-element list
             current = [raw]
 
-        # 3) append the new recipe object
-        updated = current + [recipe]
-
+        # 3) check for duplicates and append the new recipe object
+        if recipe not in current:
+            updated = current + [recipe]
+        else:
+            updated = current
 
         upd = sb.from_("user") \
                 .update({"favorite": updated}) \
