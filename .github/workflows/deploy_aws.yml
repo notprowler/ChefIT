@@ -4,7 +4,14 @@ on:
   push:
     branches: [main]
     paths:
-      - 'app/**'
+      - 'backend/**'
+      - '.github/workflows/deploy_aws.yml'
+
+  pull_request:
+    branches: [main]
+    types: [closed]
+    paths:
+      - 'backend/**'
       - '.github/workflows/deploy_aws.yml'
 
 jobs:
@@ -21,23 +28,23 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r app/requirements.txt
+          pip install -r backend/requirements.txt
 
       - name: Zip application
         run: |
           cd app
-          zip -r ../fastapi_deploy_${{ github.sha }}.zip .
+          zip -r fastapi_deploy_${{ github.sha }}.zip backend -x "*/__pycache__/*" "*.pyc"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.DEPLOY_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.DEPLOY_AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
       - name: Upload to S3
         run: |
-          aws s3 cp fastapi_deploy_${{ github.sha }}.zip s3://your-bucket-name/fastapi/fastapi_deploy_${{ github.sha }}.zip
+          aws s3 cp fastapi_deploy_${{ github.sha }}.zip s3://terraform-state-chefit-notprowler/fastapi/fastapi_deploy_${{ github.sha }}.zip
 
       - name: Create new application version
         run: |
