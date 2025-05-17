@@ -57,8 +57,14 @@ jobs:
           source venv/bin/activate
           python3 -m fastapi dev main.py &
 
-      - name: Wait for server to be ready
-        run: npx wait-on http://localhost:4173
+      - name: Wait for frontend and backend
+        run: npx wait-on http://localhost:4173 http://localhost:8000
 
       - name: Run Cypress tests
         run: cd frontend && npm run cy:run
+
+      - name: Upload Cypress screenshots
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-screenshots
+          path: frontend/cypress/screenshots
