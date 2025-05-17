@@ -1,0 +1,54 @@
+name: deploy-fastapi
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - '.github/workflows/deploy_aws.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          pip install -r app/requirements.txt
+
+      - name: Zip application
+        run: |
+          cd app
+          zip -r ../fastapi_deploy_${{ github.sha }}.zip .
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.DEPLOY_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.DEPLOY_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Upload to S3
+        run: |
+          aws s3 cp fastapi_deploy_${{ github.sha }}.zip s3://your-bucket-name/fastapi/fastapi_deploy_${{ github.sha }}.zip
+
+      - name: Create new application version
+        run: |
+          aws elasticbeanstalk create-application-version \
+            --application-name chefit-backend \
+            --source-bundle S3Bucket="terraform-state-chefit-notprowler",S3Key=fastapi/fastapi_deploy_${{ github.sha }}.zip \
+            --version-label "ver-${{ github.sha }}" \
+            --description "FastAPI deploy at commit ${{ github.sha }}"
+
+      - name: Deploy to environment
+        run: |
+          aws elasticbeanstalk update-environment \
+            --environment-name fastapi-env \
+            --version-label "ver-${{ github.sha }}"
