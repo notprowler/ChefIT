@@ -1,0 +1,27 @@
+CODE COVERAGE BEFORE ADDING GEMINI TESTING 
+
+Name                 Stmts   Miss  Cover
+----------------------------------------
+main.py                 19      4    79%
+routers\gemini.py       41     23    44%
+routers\recipes.py      26      9    65%
+routers\user.py         40      5    88%
+test_recipes.py         16      0   100%
+test_user.py            65      1    98%
+----------------------------------------
+TOTAL                  207     42    80%
+
+---------------------------------------------
+AFTER ADDING GEMINI TESTING 
+
+Name                   Stmts   Miss  Cover
+------------------------------------------
+main.py                   19      4    79%
+routers\gemini.py         41      7    83%
+routers\recipes.py        26      9    65%
+routers\user.py           40      5    88%
+test_gemini_extra.py      56      0   100%
+test_recipes.py           16      0   100%
+test_user.py              65      1    98%
+------------------------------------------
+TOTAL                    263     26    90%
