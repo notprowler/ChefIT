@@ -1,51 +1,51 @@
-name: deploy-fastapi
+# name: deploy-fastapi
 
-on:
-  pull_request:
-    branches:
-      - main
+# on:
+#   pull_request:
+#     branches:
+#       - main
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11
+#       - name: Set up Python
+#         uses: actions/setup-python@v4
+#         with:
+#           python-version: 3.11
 
-      - name: Install dependencies
-        run: |
-          pip install -r backend/requirements.txt
+#       - name: Install dependencies
+#         run: |
+#           pip install -r backend/requirements.txt
 
-      - name: Zip application
-        run: |
-          zip -r fastapi_deploy_${{ github.sha }}.zip backend -x "*/__pycache__/*" "*.pyc"
+#       - name: Zip application
+#         run: |
+#           zip -r fastapi_deploy_${{ github.sha }}.zip backend -x "*/__pycache__/*" "*.pyc"
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+#       - name: Configure AWS credentials
+#         uses: aws-actions/configure-aws-credentials@v2
+#         with:
+#           aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+#           aws-region: us-east-1
 
-      - name: Upload to S3
-        run: |
-          aws s3 cp fastapi_deploy_${{ github.sha }}.zip s3://terraform-state-chefit-notprowler/fastapi/fastapi_deploy_${{ github.sha }}.zip
+#       - name: Upload to S3
+#         run: |
+#           aws s3 cp fastapi_deploy_${{ github.sha }}.zip s3://terraform-state-chefit-notprowler/fastapi/fastapi_deploy_${{ github.sha }}.zip
 
-      - name: Create new application version
-        run: |
-          aws elasticbeanstalk create-application-version \
-            --application-name chefit-backend \
-            --source-bundle S3Bucket="terraform-state-chefit-notprowler",S3Key=fastapi/fastapi_deploy_${{ github.sha }}.zip \
-            --version-label "ver-${{ github.sha }}" \
-            --description "FastAPI deploy at commit ${{ github.sha }}"
+#       - name: Create new application version
+#         run: |
+#           aws elasticbeanstalk create-application-version \
+#             --application-name chefit-backend \
+#             --source-bundle S3Bucket="terraform-state-chefit-notprowler",S3Key=fastapi/fastapi_deploy_${{ github.sha }}.zip \
+#             --version-label "ver-${{ github.sha }}" \
+#             --description "FastAPI deploy at commit ${{ github.sha }}"
 
-      - name: Deploy to environment
-        run: |
-          aws elasticbeanstalk update-environment \
-            --environment-name fastapi-env \
-            --version-label "ver-${{ github.sha }}"
+#       - name: Deploy to environment
+#         run: |
+#           aws elasticbeanstalk update-environment \
+#             --environment-name fastapi-env \
+#             --version-label "ver-${{ github.sha }}"
